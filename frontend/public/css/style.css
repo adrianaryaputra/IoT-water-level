@@ -2,26 +2,76 @@
 @import url('https://fonts.googleapis.com/css2?family=Lexend+Deca&family=Roboto&display=swap');
 
 
+
+/* variables */
 :root{
   --color-background: #ced2cc;
   --color-accent: #1C4E80;
   --color-box: #f1f1f1;
   --color-text-default: #202020;
   --color-text-accent: #f1f1f1;
+  --color-state-danger: #991b1b;
+  --color-state-warning: #cfa416;
+  --color-state-normal:#06830c;
 
   --font-style-heading: 'Lexend Deca', sans-serif;
   --font-style-content: 'Roboto', sans-serif;
 
   --font-size-title: 24px;
-  --font-size-body: 14px;
+  --font-size-sensor-name: 20px;
+  --font-size-mac-address: 14px;
+  --font-size-body: 16px;
+  --font-size-measurement-title: 14px;
+  --font-size-measurement-value: 24px;
 }
 
+
+
+/* init */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+
+
+/* separator */
+.v-separator{
+  display: block;
+  width: 1px;
+  background-color: var(--color-background);
+  height: auto;
+}
+
+.h-separator{
+  display: block;
+  height: 1px;
+  width: auto;
+  background-color: var(--color-background);
+}
+
+
+
+/* status color pallete */
+.status-danger{
+  background-color: var(--color-state-danger);
+  color: var(--color-text-accent);
+}
+
+.status-warning{
+  background-color: var(--color-state-warning);
+  color: var(--color-text-accent);
+}
+
+.status-normal{
+  background-color: var(--color-state-normal);
+  color: var(--color-text-accent);
+}
+
+
+
+/* global elements */
 body{
   background-color: var(--color-background);
   color: var(--color-text-default);
@@ -42,13 +92,85 @@ header h1{
 }
 
 
+
 /* Device List & Measurement*/
 .sensor-list{
   margin: 1em;
 }
-.sensor-list div{
+
+.device{
   background-color: var(--color-box);
   margin-bottom: 1em;
   padding: 1em;
   border-radius: .5em;
+  display: flex;
+  align-content: stretch;
+  max-height: 200px;
+}
+
+.sensor-list .info{
+  flex-grow: 0;
+  display: block;
+  min-width: 200px;
+  padding: 0 .5em 0 0;
+}
+
+.sensor-list .info h3{
+  display: block;
+  font-size: var(--font-size-sensor-name);
+}
+
+.sensor-list .info h4{
+  display: block;
+  font-size: var(--font-size-mac-address);
+}
+
+.sensor-list .info h5{
+  display: block;
+  padding: .6em 1em;
+  border-radius: .2em;
+  width: max-content;
+  margin: .8em 0 0 0;
+}
+
+.measurement {
+  flex-grow: 0;
+  display: inline-flex;
+}
+
+.measurement .point{
+  display: flex;
+  flex-direction: column;
+  width: 120px;
+  padding: 0 .5em;
+  margin: 0 .5em;
+}
+
+.measurement h3{
+  flex-grow: 1;
+  font-size: var(--font-size-measurement-title);
+  text-transform: capitalize;
+  text-align: center;
+}
+
+.measurement h4{
+  flex-grow: 1;
+  display: block;
+  text-align: center;
+  font-size: var(--font-size-measurement-value);
+  height: auto;
+}
+
+.graph-container{
+  position: relative;
+  overflow-x: hidden;
+  flex-grow: 1;
+  flex-shrink: 10;
+  margin: 0 !important;
+  padding: 0 0 0 .5em !important;
+}
+
+.graph-container canvas{
+  margin: 0 !important;
+  padding: 0 !important;
 }
