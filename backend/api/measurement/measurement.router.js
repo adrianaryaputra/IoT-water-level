@@ -66,6 +66,113 @@ router.get('/',(req, res) => {
   
 });
 
+router.get('/aggregate',(req, res) => {
+
+  aggregation = [];
+
+  if(req.query.date_from){
+    date_from = new Date(req.query.date_from);
+    if(isNaN(date_from.getTime())) {
+      if(!res.headersSent) res.status(422).send("invalid query value: date_from");
+    }
+    else {
+      aggregation.push({
+        $match: {
+          timestamp: {$gte: date_from}
+        }
+      });
+    }
+  }
+
+  if(req.query.date_to){
+    date_from = new Date(req.query.date_to);
+    if(isNaN(date_from.getTime())) {
+      if(!res.headersSent) res.status(422).send("invalid query value: date_to");
+    }
+    else {
+      aggregation.push({
+        $match: {
+          timestamp: {$lte: date_to}
+        }
+      });
+    }
+  }
+
+  aggregation.push({
+    $sort: { timestamp: -1 }
+  });
+
+  aggregation.push({
+    $project: {
+      mac_address: 1,
+      measurement : {
+        level: '$measurement.level',
+        temperature: '$measurement.temperature',
+        humidity: '$measurement.humidity',
+        timestamp: '$timestamp',
+      }
+    }
+  })
+
+  aggregation.push({
+    $group: {
+      _id: "$mac_address",
+      measurement: {
+        $push: "$measurement",
+      }
+    }
+  });
+
+  aggregation.push({
+    $lookup: {
+      from: 'sensors',
+      localField: '_id',
+      foreignField: 'mac_address',
+      as: 'result'
+    }
+  });
+
+  aggregation.push({
+    $project: {
+      name: {
+        $arrayElemAt: [
+          "$result.name", 0
+        ]
+      },
+      last_seen: {
+        $arrayElemAt: [
+          "$result.last_seen", 0
+        ]
+      },
+      update_time: {
+        $arrayElemAt: [
+          "$result.update_time", 0
+        ]
+      },
+      location: {
+        $arrayElemAt: [
+          "$result.location", 0
+        ]
+      },
+      measurement: { 
+        "$slice": [ "$measurement", parseInt(req.query.limit) || 10 ] 
+      }
+    }
+  })
+
+  q = MeasurementDBModel.aggregate(aggregation);
+
+  q.exec((err, val) => {
+    if(err){
+      console.log(err);
+      if(!res.headersSent) res.json(err);
+    } else {
+      if(!res.headersSent) res.json(val);
+    }
+  });
+  
+});
+
 router.post('/',(req, res) => {
   MeasurementAPISchema.validateAsync(req.body)
   .then((val) => {
@@ -91,7 +198,7 @@ router.post('/',(req, res) => {
         } 
         else {
           // if not exist, create a new sensor instance
-          SensorEngine.create(res, {
+          SensorEngine.create({
             mac_address: val.mac_address,
             update_time: val.lifetime,
             last_seen: Date.now()

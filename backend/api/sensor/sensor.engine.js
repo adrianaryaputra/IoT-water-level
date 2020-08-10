@@ -1,7 +1,7 @@
 const SensorDBModel = require('./sensor.db.model');
 
 module.exports = {
-  create: async (value) => {
+  create: (value) => {
     var sensor = new SensorDBModel(value);
     return new Promise((resolve, reject) => {
       sensor.save()
