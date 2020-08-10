@@ -3,7 +3,6 @@ var CHARTLIST = {};
 
 document.addEventListener('DOMContentLoaded', () => {
   displayAllDevice(sensorListElement);
-  updateData();
 
   setInterval(() => {
     updateData();
@@ -25,7 +24,7 @@ async function getDevices(){
 async function getMeasurements(){
   const res = await fetch(
     // `${document.location.origin}:5000/record/aggregate?&date_from=${new Date(Date.now() - 3600*24000)}`
-    `${document.location.origin}:5000/record/aggregate`
+    `${document.location.origin}:5000/record/aggregate?limit=20`
   );
   return res.json();
 }
@@ -44,6 +43,7 @@ function displayAllDevice(parentElement){
       const deviceElement = createDeviceUI(device)
       parentElement.appendChild(deviceElement);
     });
+    updateData();
   })
   .catch(err => console.log)
 }
@@ -55,36 +55,36 @@ function updateData(){
     measurementDevices.forEach((device) => {
 
       const deviceElement = document.getElementById(device._id);
-      const measurementElement = deviceElement.querySelector('.measurement');
-      const levelElement = measurementElement.querySelector('.level > h4');
-      const temperatureElement = measurementElement.querySelector('.temperature > h4');
-      const humidityElement = measurementElement.querySelector('.humidity > h4');
 
-      const dataList = device.measurement.map((val) => {
-        return {
-          t: Date.parse(val.timestamp),
-          y: val.level
-        }
-      });
+      if(deviceElement){
+        const measurementElement = deviceElement.querySelector('.measurement');
+        const levelElement = measurementElement.querySelector('.level > h4');
+        const temperatureElement = measurementElement.querySelector('.temperature > h4');
+        const humidityElement = measurementElement.querySelector('.humidity > h4');
+        const sensorStatusElement = deviceElement.querySelector('.info > h5');
 
-      console.log(dataList)
+        const dataList = device.measurement.map((val) => {
+          return {
+            y: parseFloat(val.level).toFixed(2),
+            t: new Date(val.timestamp)
+          };
+        });
 
-      // const timestampDataList = device.measurement.map((val) => {
-      //   var d = new Date(val.timestamp);
-      //   return d.toLocaleString('id-ID',{
-      //     dateStyle: 'short',
-      //     timeStyle: 'short'
-      //   });
-      // });
+        levelElement.textContent = parseFloat(device.measurement[0].level).toFixed(2);
+        temperatureElement.textContent = parseFloat(device.measurement[0].temperature).toFixed(2);
+        humidityElement.textContent = parseFloat(device.measurement[0].humidity).toFixed(2);
 
-      levelElement.textContent = device.measurement[0].level;
-      temperatureElement.textContent = device.measurement[0].temperature;
-      humidityElement.textContent = device.measurement[0].humidity; 
-
-      CHARTLIST[device._id].data.datasets[0].data = dataList;
-      CHARTLIST[device._id].update();
-      
-      // changeChartData(CHARTLIST[device._id], timestampDataList, levelDataList)
+        const isOnline = checkOnline(device.last_seen, device.update_time, 1.5);
+        sensorStatusElement.textContent = isOnline ? "ONLINE" : "OFFLINE";
+        sensorStatusElement.className = isOnline ? "status-normal" : "status-danger"
+        
+        CHARTLIST[device._id].data.datasets[0].data = dataList;
+        CHARTLIST[device._id].update();
+      }
+      else{
+        console.error("cannot find device :", device._id, device)
+        displayAllDevice(sensorListElement);
+      }
 
     });
   })
@@ -149,13 +149,13 @@ function createMeasurementUI(){
   humidityElement.classList.add("humidity");
 
 
-  measurementElement.appendChild(createVSeparatorUI());
+  measurementElement.appendChild(createSeparatorUI());
   measurementElement.appendChild(levelElement);
-  measurementElement.appendChild(createVSeparatorUI());
+  measurementElement.appendChild(createSeparatorUI());
   measurementElement.appendChild(temperatureElement);
-  measurementElement.appendChild(createVSeparatorUI());
+  measurementElement.appendChild(createSeparatorUI());
   measurementElement.appendChild(humidityElement);
-  measurementElement.appendChild(createVSeparatorUI());
+  measurementElement.appendChild(createSeparatorUI());
 
   return measurementElement;
 }
@@ -168,84 +168,94 @@ function createGraphUI(device){
 
   graphContainerElement.appendChild(graphElement);
 
-  var chart = new Chart(graphElement.getContext('2d'), {
-    type: 'line',
-    data: {
-      datasets: [{
-          data: [{t:0, y:0}],
-          type: 'line',
-          backgroundColor: 'rgba(99, 99, 255, 0.2)',
-          // pointRadius: 0,
-          borderWidth: 2
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      legend: {
-        display: false
+  const darkmode = window.matchMedia('(prefers-color-scheme: dark)');
+  const colorscheme = {
+    bgColor: 'hsla(210, 64%, 31%, 0.2)',//'rgba(28, 78, 128, 0.2)',
+    borderColor: 'hsla(210, 64%, 31%, 0.9)',
+    lineColor: 'hsla(0, 0%, 13%, 0.15)'
+  }
+
+  if(darkmode.matches){
+    colorscheme.bgColor = 'hsla(210, 64%, 81%, 0.2)'; //'rgba(155, 205, 255, 0.2)';
+    colorscheme.borderColor = 'hsla(210, 64%, 81%, 0.9)';
+    colorscheme.lineColor = 'hsla(0, 0%, 95%, 0.15)';
+  }
+
+  try{
+    Chart.defaults.global.defaultColor = colorscheme.lineColor;
+    Chart.defaults.global.defaultFontColor = colorscheme.borderColor;
+    var chart = new Chart(graphElement.getContext('2d'), {
+      type: 'line',
+      data: {
+          labels: [],
+          datasets: [{
+              label: null,
+              data: [],
+              backgroundColor: colorscheme.bgColor,
+              borderColor: colorscheme.borderColor,
+              borderWidth: 1
+          }],
       },
       options: {
+        responsive: true,
+        maintainAspectRatio: false,
         scales: {
           xAxes: [{
+            gridLines: {
+              color: colorscheme.lineColor
+            },
             type: 'time',
             distribution: 'series',
             offset: true,
             ticks: {
-              major: {
-                enabled: true,
-                fontStyle: 'bold'
-              },
-              source: 'data',
-              autoSkip: true,
-              autoSkipPadding: 75,
-              maxRotation: 0,
+							major: {
+								enabled: true,
+								fontStyle: 'bold'
+							},
+							source: 'data',
+							autoSkip: true,
+							autoSkipPadding: 75,
+							maxRotation: 0,
               sampleSize: 100,
             },
-            afterBuildTicks: function(scale, ticks){
-              console.log(scale, ticks);
-              var majorUnit = scale._majorUnit;
-							var firstTick = ticks[0];
-              var i, ilen, val, tick, currMajor, lastMajor;
-              
-              val = moment(ticks[0].value);
-
-              if ((majorUnit === 'minute' && val.second() === 0)
-                  || (majorUnit === 'hour' && val.minute() === 0)
-                  || (majorUnit === 'day' && val.hour() === 9)
-                  || (majorUnit === 'month' && val.date() <= 3 && val.isoWeekday() === 1)
-                  || (majorUnit === 'year' && val.month() === 0)) {
-								firstTick.major = true;
-							} else {
-								firstTick.major = false;
+            time: {
+              displayFormats: {
+                millisecond: 'kk:mm:ss.SS',
+                second: 'ddd kk:mm:ss',
+                minute: 'ddd kk:mm',
+                hour: 'ddd kk:mm',
+                day: 'ddd DD',
+                week: 'DD MMM',
+                month: 'MMM YY',
+                quarter: 'MMM YY',
+                year: 'MMM YY',
               }
-
-              lastMajor = val.get(majorUnit);
-
-              for (i = 1, ilen = ticks.length; i < ilen; i++) {
-								tick = ticks[i];
-								val = moment(tick.value);
-								currMajor = val.get(majorUnit);
-								tick.major = currMajor !== lastMajor;
-								lastMajor = currMajor;
-              }
-              
-              return ticks;
             }
           }],
           yAxes: [{
-						gridLines: {
+            gridLines: {
+              color: colorscheme.lineColor,
 							drawBorder: false
-						},
-						scaleLabel: {
+            },
+            scaleLabel: {
 							display: true,
-							labelString: 'Closing price ($)'
-						}
-					}]
+							labelString: 'meter'
+						},
+            ticks: {
+                beginAtZero: false
+            }
+          }]
+        },
+        legend: {display: false},
+        tooltips:{
+          intersect: false,
+          mode: 'index'
         }
       }
-    }
-  });
+    });
+  } catch(err) {
+    console.log(err)
+  }
 
   CHARTLIST[device.mac_address] = chart
 
@@ -253,16 +263,9 @@ function createGraphUI(device){
 }
 
 
-function createVSeparatorUI(){
+function createSeparatorUI(){
   const separatorElement = document.createElement("div");
-  separatorElement.className = "v-separator";
-  return separatorElement;
-}
-
-
-function createHSeparatorUI(){
-  const separatorElement = document.createElement("div");
-  separatorElement.className = "h-separator";
+  separatorElement.className = "separator";
   return separatorElement;
 }
 

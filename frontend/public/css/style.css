@@ -5,14 +5,15 @@
 
 /* variables */
 :root{
-  --color-background: #ced2cc;
-  --color-accent: #1C4E80;
-  --color-box: #f1f1f1;
-  --color-text-default: #202020;
-  --color-text-accent: #f1f1f1;
-  --color-state-danger: #991b1b;
-  --color-state-warning: #cfa416;
-  --color-state-normal:#06830c;
+  --color-background: hsl(100, 6%, 81%);
+  --color-accent: hsl(210, 64%, 31%);
+  --color-box: hsl(0, 0%, 95%);
+  --color-text-default: hsl(0, 0%, 13%);
+  --color-text-accent: hsl(0, 0%, 95%);
+  --color-state-danger: hsl(0, 70%, 35%);
+  --color-state-warning: hsl(46, 81%, 45%);
+  --color-state-normal:hsl(123, 91%, 27%);
+  --color-test: hsla(210, 64%, 31%, 0.2);
 
   --font-style-heading: 'Lexend Deca', sans-serif;
   --font-style-content: 'Roboto', sans-serif;
@@ -27,6 +28,22 @@
 
 
 
+/* dark mode */
+@media (prefers-color-scheme: dark) {
+  :root{
+    --color-background: #3f414b;
+    --color-accent: hsl(210, 68%, 55%);
+    --color-box: hsl(255, 0%, 10%);
+    --color-text-default: hsl(0, 0%, 92%);
+    --color-text-accent: hsl(0, 0%, 92%);
+    --color-state-danger: hsl(0, 70%, 56%);
+    --color-state-warning: hsl(46, 81%, 55%);
+    --color-state-normal:hsl(123, 91%, 37%);
+  }
+}
+
+
+
 /* init */
 * {
   margin: 0;
@@ -37,18 +54,11 @@
 
 
 /* separator */
-.v-separator{
+.separator{
   display: block;
   width: 1px;
   background-color: var(--color-background);
   height: auto;
-}
-
-.h-separator{
-  display: block;
-  height: 1px;
-  width: auto;
-  background-color: var(--color-background);
 }
 
 
@@ -173,4 +183,79 @@ header h1{
 .graph-container canvas{
   margin: 0 !important;
   padding: 0 !important;
+}
+
+/* phone / tablet */
+@media (max-width: 1020px) {
+  
+  .device{
+    display: flex;
+    flex-direction: column;
+    max-height: unset;
+  }
+
+  .measurement{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    padding: 1em 0;
+  }
+
+  .measurement .point{
+    width: auto;
+    display: flex;
+    padding: 1em 0;
+    flex-grow: 1;
+  }
+
+}
+
+
+
+@media (max-width: 600px){
+
+  .device{
+    display: flex;
+    flex-direction: column;
+    max-height: unset;
+  }
+
+  .measurement{
+    display: flex;
+    flex-direction: column;
+    padding: 1em 0;
+  }
+
+  .measurement .point{
+    width: auto;
+    display: flex;
+    flex-direction: row;
+    padding: .5em 0;
+  }
+
+  .measurement .point h3{
+    flex-grow: 2;
+    width: auto;
+    height: auto;
+    font-size: var(--font-size-sensor-name);
+    text-align: left;
+  }
+
+  .measurement .point h4{
+    flex-grow: 1;
+    width: auto;
+    height: auto;
+    font-size: var(--font-size-sensor-name);
+    text-align: right;
+  }
+
+  .separator{
+    width: auto;
+    height: 1px;
+  }
+
+  .graph-container{
+    padding: 1em 0 0 0 !important;
+  }
+  
 }
