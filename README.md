@@ -50,5 +50,9 @@ dokumentasi API dapat dilihat [di sini](wiki/API.md).
 ### 📊 Visualisasi data
 Data yang telah diakuisisi oleh server dapat divisualisasikan dalam bentuk grafik serta dapat diunduh untuk dianalisis.
 
+![tampilan terang]("./wiki/resource/img/gui.light.png")
+
+![tampilan gelap]("./wiki/resource/img/gui.dark.png")
+
 
 
