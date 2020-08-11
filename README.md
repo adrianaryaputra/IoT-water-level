@@ -4,12 +4,13 @@ Sistem ini dibuat untuk mengamati ketinggian muka air sungai di daerah-daerah. I
 ## 📃 Desain dan Konsep
 Secara umum, sistem pengambilan dan pemantauan data ketinggian permukaan air sungai ini dapat dibagi menjadi beberapa sub-sistem, yakni
 
-### 📳 Perangkat Keras
+### 🖥 Perangkat Keras
 
 #### 🌊 Sistem deteksi ketinggian permukaan air sungai
 sensor jarak akan digunakan untuk mengukur jarak antara pelampung dengan sensor jarak.
 
 ![Pengukuran ketinggian permukaan air sungai dengan sensor jarak](./wiki/resource/img/level-measurement.png)
+
 ***Gambar 1.** Pengukuran ketinggian permukaan air sungai dengan sensor jarak*
 
 [dalam tahap pengembangan]
