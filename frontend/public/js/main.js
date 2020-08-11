@@ -57,6 +57,9 @@ function updateData(){
       const deviceElement = document.getElementById(device._id);
 
       if(deviceElement){
+        const infoElement = deviceElement.querySelector('.info');
+        const nameElement = infoElement.querySelector('h3');
+
         const measurementElement = deviceElement.querySelector('.measurement');
         const levelElement = measurementElement.querySelector('.level > h4');
         const temperatureElement = measurementElement.querySelector('.temperature > h4');
@@ -69,6 +72,8 @@ function updateData(){
             t: new Date(val.timestamp)
           };
         });
+
+        nameElement.textContent = device.name;
 
         levelElement.textContent = parseFloat(device.measurement[0].level).toFixed(2);
         temperatureElement.textContent = parseFloat(device.measurement[0].temperature).toFixed(2);
