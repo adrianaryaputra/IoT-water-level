@@ -34,7 +34,7 @@ services:
   server-static:
     container_name: server-node-static
     restart: always
-    build: ./frontend/
+    build: ./frontend/website/
     ports: 
       - '80:80'
     environment: 
