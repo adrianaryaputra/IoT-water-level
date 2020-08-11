@@ -1,0 +1,43 @@
+version: '3'
+
+services: 
+
+  mongo:
+    container_name: server-database-mongo
+    image: mongo
+    ports: 
+      - '27017:27017'
+    volumes: 
+      - ~/mongo/data:/data/db 
+  
+  server-api:
+    container_name: server-node-api
+    restart: always
+    build: ./backend/api/
+    ports:
+      - '5000:5000'
+    links: 
+      - mongo
+    environment: 
+      - API_PORT=5000
+      - DB_ADDRESS=mongodb://mongo:27017/waterlevel
+      - DEFAULT_DEVICE_NAME=unknown device
+      - UPDATE_MIN=1
+      - UPDATE_MAX=3600
+      - TEMP_MIN=10
+      - TEMP_MAX=80
+      - LEVEL_MIN=0
+      - LEVEL_MAX=10
+      - HUMIDITY_MIN=0
+      - HUMIDITY_MAX=100
+
+  server-static:
+    container_name: server-node-static
+    restart: always
+    build: ./frontend/
+    ports: 
+      - '80:80'
+    environment: 
+      - STATIC_PORT=80
+  
+  
