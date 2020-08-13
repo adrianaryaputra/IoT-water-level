@@ -5,8 +5,9 @@ const SensorDBModel = require('./sensor.db.model');
 const SensorEngine = require('./sensor.engine');
 
 router.get('/', (req, res) => {
-  SensorDBModel.find()
-  .then((sensor) => {
+  q = SensorDBModel.find();
+  q.sort({name : 1});
+  q.then((sensor) => {
     res.json(sensor)
   })
   .catch((err) => res.status(500).send("cannot obtain data"))
