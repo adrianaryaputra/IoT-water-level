@@ -23,7 +23,7 @@ services:
       - DB_ADDRESS=mongodb://mongo:27017/waterlevel
       - DEFAULT_DEVICE_NAME=unknown device
       - UPDATE_MIN=1
-      - UPDATE_MAX=3600
+      - UPDATE_MAX=10
       - TEMP_MIN=10
       - TEMP_MAX=80
       - LEVEL_MIN=0
