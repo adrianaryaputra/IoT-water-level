@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   setInterval(() => {
     updateData();
-  }, 5000);
+  }, 1000);
 });
 
 
