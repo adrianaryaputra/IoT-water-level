@@ -1,6 +1,10 @@
 const sensorListElement = document.querySelector('.sensor-list');
 var CHARTLIST = {};
 
+const OFFLINE_INACTIVE_SECOND = 10;
+const AGGREGATE_LIMIT = 20;
+
+
 document.addEventListener('DOMContentLoaded', () => {
   displayAllDevice(sensorListElement);
   updateData();
@@ -17,11 +21,10 @@ async function getDevices(){
   return res.json()
 }
 
-
 async function getMeasurements(){
   const res = await fetch(
     // `${document.location.origin}:5000/record/aggregate?&date_from=${new Date(Date.now() - 3600*24000)}`
-    `${document.location.origin}:5000/record/aggregate?limit=20`
+    `${document.location.origin}:5000/record/aggregate?limit=${AGGREGATE_LIMIT}`
   );
   return res.json();
 }
@@ -75,7 +78,7 @@ function updateData(){
         temperatureElement.textContent = parseFloat(device.measurement[0].temperature).toFixed(2);
         humidityElement.textContent = parseFloat(device.measurement[0].humidity).toFixed(2);
 
-        const isOnline = checkOnline(device.last_seen, device.update_time, 1.5);
+        const isOnline = checkOnline(device.last_seen, device.update_time, OFFLINE_INACTIVE_SECOND);
         sensorStatusElement.textContent = isOnline ? "ONLINE" : "OFFLINE";
         sensorStatusElement.className = isOnline ? "status-normal" : "status-danger"
         
@@ -134,7 +137,7 @@ function createInfoUI(device){
   macElement.textContent = device.mac_address;
 
   const statusElement = document.createElement('h5');
-  const isOnline = checkOnline(device.last_seen, device.update_time, 1.5);
+  const isOnline = checkOnline(device.last_seen, device.update_time, OFFLINE_INACTIVE_SECOND);
   statusElement.textContent = isOnline ? "ONLINE" : "OFFLINE";
   statusElement.className = isOnline ? "status-normal" : "status-danger"
 
@@ -303,10 +306,10 @@ function createMeasurementPointUI(title){
 
 
 // Logical Operation
-function checkOnline(datetime, lifetime, multiplier){
+function checkOnline(datetime, lifetime, safetime){
   const lastSeen = new Date(datetime);
   const lastSeenRaw = Math.floor((Date.now() - lastSeen) / 1000);
-  return (lastSeenRaw < (lifetime * multiplier));
+  return (lastSeenRaw < (lifetime + safetime));
 }
 
 function changeChartData(chart, label, data) {
