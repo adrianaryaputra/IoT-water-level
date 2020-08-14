@@ -40,7 +40,6 @@ function displayAllDevice(parentElement){
       const deviceElement = createDeviceUI(device)
       parentElement.appendChild(deviceElement);
     });
-    updateData();
   })
   .catch(err => console.log)
 }
@@ -89,14 +88,14 @@ function updateData(){
       }
 
     });
-
-    setTimeout(updateData, 1000);
+    console.log('GET');
+    setTimeout(() => {updateData()}, 1000);
 
   })
   .catch(err => {
 
     console.log(err)
-    setTimeout(updateData, 1000);
+    setTimeout(() => {updateData()}, 1000);
 
   });
 }
