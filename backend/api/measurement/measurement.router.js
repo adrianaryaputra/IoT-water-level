@@ -99,6 +99,10 @@ router.get('/aggregate',(req, res) => {
   }
 
   aggregation.push({
+    $limit: 1000
+  });
+
+  aggregation.push({
     $sort: { timestamp: -1 }
   });
 
