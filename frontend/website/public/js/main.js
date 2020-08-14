@@ -3,10 +3,7 @@ var CHARTLIST = {};
 
 document.addEventListener('DOMContentLoaded', () => {
   displayAllDevice(sensorListElement);
-
-  setInterval(() => {
-    updateData();
-  }, 1000);
+  updateData();
 });
 
 
@@ -92,8 +89,16 @@ function updateData(){
       }
 
     });
+
+    setTimeout(updateData, 1000);
+
   })
-  .catch(err => console.log(err));
+  .catch(err => {
+
+    console.log(err)
+    setTimeout(updateData, 1000);
+
+  });
 }
 
 
