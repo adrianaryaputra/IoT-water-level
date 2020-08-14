@@ -14,17 +14,16 @@
 
 WebServer Server;
 WiFiClient Client;
-Ticker http_POST_device_ticker;
 
 AutoConnect Portal(Server);
 AutoConnectConfig Config;
 
 void redirectPage();
-
-void http_GET(String httpLink);
-void http_GET_device();
-void http_POST(String httpLink, String httpBody);
 void http_POST_measurement();
+void setMeasurementTimeout();
+
+int set_lifetime = HW_DEFAULT_LIFETIME;
+unsigned long last_trigger = 0;
 
 void setup() {
   delay(1000);
@@ -47,8 +46,6 @@ void setup() {
 
   if (Portal.begin()) {
     Serial.println("WiFi connected: " + WiFi.localIP().toString());
-//    http_GET_DeviceTicker.attach(5, http_GET_device);    
-    http_POST_measurement();
   }
 
   Server.on("/", redirectPage);
@@ -56,7 +53,11 @@ void setup() {
 
 void loop() {
   Portal.handleClient();
-  esp_task_wdt_reset();
+  
+  if(millis() - last_trigger > (set_lifetime*1000)){
+    http_POST_measurement();
+    last_trigger = millis();
+  }
 }
 
 
@@ -70,34 +71,9 @@ void redirectPage() {
 
 
 // CLIENT CALLBACK FUNCTION
-void http_GET(String httpLink){
-  HTTPClient http;
-  http.begin(String("http://") + API_URL + ":" + API_PORT + httpLink);
-  int httpCode = http.GET();
-
-  if(httpCode > 0) {
-    if(httpCode == HTTP_CODE_OK) {
-      String payload = http.getString();
-      Serial.println(payload);
-      Serial.println(WiFi.macAddress());
-    }
-  } else {
-    Serial.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
-  }
-}
-
-void http_GET_device(){
-  // feed the dog
-  esp_task_wdt_reset();
-  
-  http_GET(String("/device"));
-}
-
 void http_POST_measurement(){
   // feed the dog
   esp_task_wdt_reset();
-
-  int set_lifetime = HW_DEFAULT_LIFETIME;
   
   String httpLink = "/record";
   
@@ -112,8 +88,8 @@ void http_POST_measurement(){
   
   String httpBody;
   serializeJson(doc, httpBody);
-  Serial.print("Send : ");
-  Serial.println(httpBody);
+//  Serial.print("Send : ");
+//  Serial.println(httpBody);
 
   HTTPClient http;
   http.begin(String("http://") + API_URL + ":" + API_PORT + httpLink);
@@ -130,5 +106,4 @@ void http_POST_measurement(){
     Serial.print("SET Lifetime : ");
     Serial.println(set_lifetime);
   }
-  http_POST_device_ticker.once(set_lifetime, http_POST_measurement);
 }
