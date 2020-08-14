@@ -193,7 +193,6 @@ function createGraphUI(device){
   try{
     Chart.defaults.global.defaultColor = colorscheme.lineColor;
     Chart.defaults.global.defaultFontColor = colorscheme.borderColor;
-    Chart.defaults.global.animation.duration = 0;
     var chart = new Chart(graphElement.getContext('2d'), {
       type: 'line',
       data: {
@@ -209,6 +208,9 @@ function createGraphUI(device){
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        animation: {
+          duration: 0
+        },
         scales: {
           xAxes: [{
             gridLines: {
