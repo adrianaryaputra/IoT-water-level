@@ -4,6 +4,12 @@
 #define API_PORT 5000
 #define HW_DEFAULT_LIFETIME 2
 
+#define DHTPIN 13
+#define DHTTYPE DHT11
+
+#define HCSRTRIG 15
+#define HCSRECHO 2
+
 #include <WiFi.h>
 #include <ArduinoJson.h>
 #include <WebServer.h>
@@ -11,12 +17,18 @@
 #include <AutoConnect.h>
 #include <Ticker.h>
 #include "esp_task_wdt.h"
-
 WebServer Server;
 WiFiClient Client;
-
 AutoConnect Portal(Server);
 AutoConnectConfig Config;
+
+#include <Adafruit_Sensor.h>
+#include <DHT.h>
+#include <DHT_U.h>
+#include <HCSR04.h>
+
+DHT_Unified dht(DHTPIN, DHTTYPE);
+UltraSonicDistanceSensor distanceSensor(HCSRTRIG, HCSRECHO);
 
 void redirectPage();
 void http_POST_measurement();
@@ -48,15 +60,19 @@ void setup() {
     Serial.println("WiFi connected: " + WiFi.localIP().toString());
   }
 
+  dht.begin();
+
   Server.on("/", redirectPage);
 }
 
 void loop() {
   Portal.handleClient();
-  
-  if(millis() - last_trigger > (set_lifetime*1000)){
-    http_POST_measurement();
-    last_trigger = millis();
+
+  if(WiFi.status() == WL_CONNECTED){
+    if(millis() - last_trigger > (set_lifetime*1000)){
+      http_POST_measurement();
+      last_trigger = millis();
+    }
   }
 }
 
@@ -74,6 +90,12 @@ void redirectPage() {
 void http_POST_measurement(){
   // feed the dog
   esp_task_wdt_reset();
+
+  // get measurement
+  sensors_event_t eventTemp;
+  sensors_event_t eventHumid;
+  dht.temperature().getEvent(&eventTemp);
+  dht.humidity().getEvent(&eventHumid);
   
   String httpLink = "/record";
   
@@ -82,14 +104,14 @@ void http_POST_measurement(){
   doc["lifetime"] = set_lifetime;
   
   JsonObject measurement = doc.createNestedObject("measurement");
-  measurement["level"] = random(500,700) / 100.0;
-  measurement["temperature"] = random(3500,3800) / 100.0;
-  measurement["humidity"] = random(6000,7000) / 100.0;
+  measurement["level"] = distanceSensor.measureDistanceCm() / 100.0;
+  measurement["temperature"] = isnan(eventTemp.temperature)? 0 : eventTemp.temperature;
+  measurement["humidity"] = isnan(eventHumid.relative_humidity)? 0 : eventHumid.relative_humidity;
   
   String httpBody;
   serializeJson(doc, httpBody);
-//  Serial.print("Send : ");
-//  Serial.println(httpBody);
+  Serial.print("Send : ");
+  Serial.println(httpBody);
 
   HTTPClient http;
   http.begin(String("http://") + API_URL + ":" + API_PORT + httpLink);
@@ -103,7 +125,8 @@ void http_POST_measurement(){
     StaticJsonDocument<256> doc;
     deserializeJson(doc, payload);
     set_lifetime = doc["set"]["lifetime"];
-    Serial.print("SET Lifetime : ");
-    Serial.println(set_lifetime);
   }
+  if(set_lifetime <= 0) set_lifetime = HW_DEFAULT_LIFETIME;
+  Serial.print("SET Lifetime : ");
+  Serial.println(set_lifetime);
 }
