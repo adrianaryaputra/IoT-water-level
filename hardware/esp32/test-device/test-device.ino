@@ -1,5 +1,5 @@
 #define AUTOCONNECT_URI "/"
-#define API_URL "34.101.157.220"
+#define API_URL "35.184.90.11"
 //#define API_URL "192.168.43.106"
 #define API_PORT 5000
 #define HW_DEFAULT_LIFETIME 2
@@ -9,6 +9,7 @@
 
 #define HCSRTRIG 15
 #define HCSRECHO 2
+#define HW_DEFAULT_PIPELENGTH 4
 
 #include <WiFi.h>
 #include <ArduinoJson.h>
@@ -104,7 +105,10 @@ void http_POST_measurement(){
   doc["lifetime"] = set_lifetime;
   
   JsonObject measurement = doc.createNestedObject("measurement");
-  measurement["level"] = distanceSensor.measureDistanceCm() / 100.0;
+  int distMeasure = distanceSensor.measureDistanceCm();
+  if(distMeasure < 0){ distMeasure = 0; }
+  double levelMeasure = HW_DEFAULT_PIPELENGTH - (distMeasure/100.0);
+  measurement["level"] = levelMeasure;
   measurement["temperature"] = isnan(eventTemp.temperature)? 0 : eventTemp.temperature;
   measurement["humidity"] = isnan(eventHumid.relative_humidity)? 0 : eventHumid.relative_humidity;
   
