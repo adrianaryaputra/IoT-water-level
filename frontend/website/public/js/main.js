@@ -39,6 +39,10 @@ function displayAllDevice(parentElement){
   getDevices()
   .then((devices) => {
     parentElement.innerHTML = '';
+    addDeviceElement = document.createElement('p');
+    addDeviceElement.className = 'add-device-btn';
+    addDeviceElement.textContent = 'Add Device';
+    parentElement.appendChild(addDeviceElement);
     devices.forEach((device) => {
       const deviceElement = createDeviceUI(device)
       parentElement.appendChild(deviceElement);
@@ -257,11 +261,11 @@ function createGraphUI(device){
 							labelString: 'meter'
 						},
             ticks: {
-                beginAtZero: false
+                beginAtZero: true
             }
           }]
         },
-        legend: {display: false},
+        legend: {display: true},
         tooltips:{
           intersect: false,
           mode: 'index'

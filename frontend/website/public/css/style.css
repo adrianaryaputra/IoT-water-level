@@ -8,6 +8,7 @@
   --color-background: hsl(100, 6%, 81%);
   --color-accent: hsl(210, 64%, 31%);
   --color-box: hsl(0, 0%, 95%);
+  --color-box-hover: hsl(10, 0%, 100%);
   --color-text-default: hsl(0, 0%, 13%);
   --color-text-accent: hsl(0, 0%, 95%);
   --color-state-danger: hsl(0, 70%, 35%);
@@ -34,6 +35,7 @@
     --color-background: #3f414b;
     --color-accent: hsl(210, 68%, 55%);
     --color-box: hsl(255, 0%, 10%);
+    --color-box-hover: hsl(255, 0%, 0%);
     --color-text-default: hsl(0, 0%, 92%);
     --color-text-accent: hsl(0, 0%, 92%);
     --color-state-danger: hsl(0, 70%, 56%);
@@ -108,6 +110,24 @@ header h1{
   margin: 1em;
 }
 
+.add-device-btn{
+  background-color: var(--color-box);
+  margin: 0 0 1em 0;
+  padding: 1em;
+  border-radius: .5em;
+  text-align: center;
+  font-size: var(--font-size-sensor-name);
+}
+
+.add-device-btn::before{
+  content: '➕ ';
+}
+
+.add-device-btn:active{
+  background-color: var(--color-box-hover);
+  transition: .2s;
+}
+
 .device{
   background-color: var(--color-box);
   margin-bottom: 1em;
@@ -116,6 +136,11 @@ header h1{
   display: flex;
   align-content: stretch;
   max-height: 200px;
+}
+
+.device:active{
+  background-color: var(--color-box-hover);
+  transition: .2s;
 }
 
 .sensor-list .info{
