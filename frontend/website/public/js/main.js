@@ -265,7 +265,7 @@ function createGraphUI(device){
             }
           }]
         },
-        legend: {display: true},
+        legend: {display: false},
         tooltips:{
           intersect: false,
           mode: 'index'
