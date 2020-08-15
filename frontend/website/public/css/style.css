@@ -135,7 +135,7 @@ header h1{
   border-radius: .5em;
   display: flex;
   align-content: stretch;
-  max-height: 200px;
+  min-height: 200px;
 }
 
 .device:active{
@@ -207,7 +207,7 @@ header h1{
 
 .graph-container canvas{
   margin: 0 !important;
-  padding: 0 !important;
+  padding: 1em 0 0 0 !important;
 }
 
 /* phone / tablet */
