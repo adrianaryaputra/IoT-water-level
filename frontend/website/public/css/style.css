@@ -119,6 +119,10 @@ header h1{
   font-size: var(--font-size-sensor-name);
 }
 
+.add-device-btn:hover{
+  cursor: pointer;
+}
+
 .add-device-btn::before{
   content: '➕ ';
 }
@@ -208,6 +212,112 @@ header h1{
 .graph-container canvas{
   margin: 0 !important;
   padding: 1em 0 0 0 !important;
+}
+
+.level h4::after{
+  content: ' m';
+  font-size: var(--font-size-mac-address);
+}
+
+.temperature h4::after{
+  content: '°C';
+  font-size: var(--font-size-mac-address);
+}
+
+.humidity h4::after{
+  content: ' %';
+  font-size: var(--font-size-mac-address);
+}
+
+.add-device-holder{
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0,0,0,0.9);
+  padding: 1em;
+}
+
+.add-device{
+  position: relative;
+  top: 50%;
+  padding: 0;
+  margin: auto;
+  max-width: 500px;
+  vertical-align: middle;
+  background-color: var(--color-box);
+  border-radius: 1em;
+  transform: translateY(-50%);
+}
+
+.copyright{
+  text-align: center;
+  padding: 1em;
+}
+
+form{
+  padding: 1em;
+  font-style: var(--font-style-body);
+  font-size: var(--font-size-body);
+}
+
+.col{
+  display: flex;
+  flex-direction: column;
+}
+
+.row{
+  display: flex;
+  flex-direction: row;
+  flex-flow: wrap;
+}
+
+*+.row{
+  margin-block-start: 1em;
+}
+
+label{
+  width: 150px;
+  padding: .5em;
+}
+
+input{
+  flex-grow: 2;
+  padding: .5em;
+  border-radius: .5em;
+}
+
+.submit{
+  background-color: var(--color-state-normal);
+}
+
+.cancel{
+  background-color: var(--color-state-danger);
+}
+
+button{
+  display: block;
+  padding: 1em;
+  flex-grow: 1;
+  font-size: var(--font-size-mac-address);
+  color: var(--color-text-accent);
+  background-color: var(--color-accent);
+  border: 0px;
+  border-radius: .5em;
+}
+
+button:hover{
+  cursor: pointer;
+}
+
+button:disabled{
+  opacity: 0.6;
+  cursor: not-allowed !important;
+}
+
+.row button+button{
+  margin-inline-start: 1em;
 }
 
 /* phone / tablet */

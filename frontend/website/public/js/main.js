@@ -1,4 +1,6 @@
 const sensorListElement = document.querySelector('.sensor-list');
+const addHolderElement = document.querySelector('.add-device-holder');
+const urlParams = new URLSearchParams(window.location.search);
 var CHARTLIST = {};
 
 const OFFLINE_INACTIVE_SECOND = 10;
@@ -8,6 +10,12 @@ const AGGREGATE_LIMIT = 20;
 document.addEventListener('DOMContentLoaded', () => {
   displayAllDevice(sensorListElement);
   updateData();
+
+  // search add parameter
+  URLParAdd = urlParams.get('add');
+  if(URLParAdd != null){
+    showAdd();
+  }
 });
 
 
@@ -18,7 +26,20 @@ async function getDevices(){
   const res = await fetch(
     `${document.location.origin}:5000/device`
   )
-  return res.json()
+  return res.json();
+}
+
+async function postDevices(body){
+  const res = await fetch(
+    `${document.location.origin}:5000/device`, {
+      method: 'POST',
+      body: JSON.stringify(body),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+  )
+  return res.json();
 }
 
 async function getMeasurements(){
@@ -34,6 +55,96 @@ async function getMeasurements(){
 
 
 // UI DISPLAY & UPDATE
+function showDetail(){
+  
+}
+
+
+function showAdd(){
+
+  var mac_addr = urlParams.get('add');
+  const formElement = addHolderElement.querySelector('form');
+  formElement.querySelector('.submit').textContent = 'Submit';
+  
+  formElement.addEventListener('submit', (event) => {
+    event.preventDefault();
+  });
+
+  formElement.addEventListener('input', (evt)=>{
+    checkAddForm();
+  });
+  
+  if(mac_addr == null || mac_addr == undefined) mac_addr = '';
+  addHolderElement.querySelector('#add_mac_address').value = mac_addr;
+
+  if(addHolderElement.style.display == 'none'){
+    addHolderElement.style.display = 'block';
+  }
+  else{
+    addHolderElement.style.display = 'none';
+  }
+
+  checkAddForm();
+}
+
+
+function checkAddForm(){
+  notValid = false;
+  const formElement = addHolderElement.querySelector('form');
+  const submitBtnElement = formElement.querySelector('.submit');
+  const formData = new FormData(formElement);
+  const mac_address = formData.get('add_mac_address');
+  const name = formData.get('add_name');
+  const lifetime = formData.get('add_lifetime');
+  const pipe_length = formData.get("add_pipe_length");
+
+  if(mac_address.match(/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/gi) == null){
+    notValid = notValid || true;
+  }
+
+  if(name.match(/^[\w\s]{1,21}$/gi) == null){
+    notValid = notValid || true
+  }
+
+  lifetime_num = parseInt(lifetime)
+  if(isNaN(lifetime_num)){
+    notValid = notValid || true
+  }
+
+  pipe_length_num = parseInt(pipe_length)
+  if(isNaN(pipe_length_num)){
+    notValid = notValid || true
+  }
+
+  submitBtnElement.disabled =  notValid;
+}
+
+
+function getAddForm(){
+
+  const formElement = addHolderElement.querySelector('form');
+  const formData = new FormData(formElement);
+  formElement.querySelector('.submit').disabled = true;
+  formElement.querySelector('.submit').textContent = 'Submitting ...';
+  
+  body = {
+    mac_address: formData.get('add_mac_address'),
+    name: formData.get('add_name'),
+    update_time: parseInt(formData.get('add_lifetime'))
+    // pipe_length: parseInt(formData.get("add_pipe_length"))
+  };
+
+  postDevices(body)
+  .then(() => {
+    window.location = document.location.origin;
+  })
+  .catch((err) => {
+    formElement.querySelector('.submit').textContent = 'Failed to Submit';
+  });
+
+}
+
+
 function displayAllDevice(parentElement){
   CHARTLIST = {};
   getDevices()
@@ -42,6 +153,9 @@ function displayAllDevice(parentElement){
     addDeviceElement = document.createElement('p');
     addDeviceElement.className = 'add-device-btn';
     addDeviceElement.textContent = 'Add Device';
+    addDeviceElement.addEventListener('click', ()=>{
+      showAdd();
+    });
     parentElement.appendChild(addDeviceElement);
     devices.forEach((device) => {
       const deviceElement = createDeviceUI(device)
@@ -95,7 +209,6 @@ function updateData(){
       }
 
     });
-    console.log('GET');
     setTimeout(() => {updateData()}, 1000);
 
   })

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>SMcK - Pengamatan Sungai</title>
   <link rel="stylesheet" href="./css/style.css">
 </head>
@@ -10,7 +10,40 @@
   <header>
     <h1>SMcK - Pengamatan Sungai</h1>
   </header>
-  <div class="sensor-list"></div>
+  <main>
+    <div class="sensor-list"></div>
+    <section class="add-device-holder" style="display: none;">
+      <div class="add-device">
+        <form>
+          <div class="col">
+            <div class="row">
+              <label>MAC Address</label>
+              <input type="text" id="add_mac_address" name="add_mac_address" placeholder="0A-1B-2C-3D-4E-5F">
+            </div>
+            <div class="row">
+              <label>Name</label>
+              <input type="text" id="add_name" name="add_name" value="Unknown Device">
+            </div>
+            <div class="row">
+              <label>Update Rate (s)</label>
+              <input type="text" id="add_lifetime" name="add_lifetime" value="100">
+            </div>
+            <div class="row">
+              <label>Pipe Length (m)</label>
+              <input type="text" id="add_pipe_length" name="add_pipe_length" value="4">
+            </div>
+          </div>
+          <div class="row">
+            <button class="submit" onclick="getAddForm()" disabled>Submit</button>
+            <button class="cancel" onclick="showAdd()">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+  <footer class="copyright">
+    copyright ©️ 2020
+  </footer>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
   <script src="./js/main.js"></script>
 </body>
