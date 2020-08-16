@@ -27,6 +27,10 @@ Sensor = new Schema({
   update_time: {
     type: Number,
     required: true
+  },
+  pipe_length: {
+    type: Number,
+    default: 4
   }
 });
 
