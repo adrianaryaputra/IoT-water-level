@@ -12,8 +12,10 @@ router.get('/',(req, res) => {
 
   // query by mac address
   if(req.query.mac_address){
+    mac_raw = req.query.mac_address;
+    mac_filtered = mac_raw.toUpperCase().replace(/:/gi,'-')
     q.find({
-      mac_address: req.query.mac_address
+      mac_address: mac_filtered
     });
   }
 
@@ -182,9 +184,9 @@ router.post('/',(req, res) => {
   .then((val) => {
     MeasurementEngine.create(res, val)
     .then(() => {
-      SensorEngine.getUpdateTime(val.mac_address)
-      .then((time) => {
-        if(time){
+      SensorEngine.getUpdate(val.mac_address)
+      .then((updateValue) => {
+        if(updateValue){
           // if sensor exist, update last_seen
           SensorEngine.update(val.mac_address, {
             last_seen: Date.now()
@@ -193,9 +195,7 @@ router.post('/',(req, res) => {
             // get timeout on POST measurement
             res.json({ 
               message: "ok", 
-              set: {
-                lifetime: time
-              } 
+              set: updateValue
             })
           })
           .catch((err) => console.log(err));

@@ -4,7 +4,7 @@ module.exports = {
   create: async (httpResponse, value) => {
 
     var measurement = new MeasurementDBModel({
-      mac_address: value.mac_address,
+      mac_address: value.mac_address.toUpperCase().replace(/:/gi,'-'),
       timestamp: Date.now(),
       lifetime: value.lifetime,
       measurement: value.measurement
