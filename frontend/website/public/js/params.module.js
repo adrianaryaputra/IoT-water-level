@@ -1,0 +1,7 @@
+const DEVICE_INACTIVE_AFTER = 10; //second
+const AGGREGATE_LIMIT = 20;
+
+export var Param = {
+  DEVICE_INACTIVE_AFTER,
+  AGGREGATE_LIMIT,
+}

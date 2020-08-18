@@ -16,7 +16,7 @@
   --color-state-normal:hsl(123, 91%, 27%);
   --color-test: hsla(210, 64%, 31%, 0.2);
 
-  --font-style-heading: 'Lexend Deca', sans-serif;
+  --font-style-heading: 'Roboto', sans-serif;
   --font-style-content: 'Roboto', sans-serif;
 
   --font-size-title: 24px;
@@ -121,6 +121,8 @@ header h1{
 
 .add-device-btn:hover{
   cursor: pointer;
+  background-color: var(--color-box-hover);
+  transition: .2s;
 }
 
 .add-device-btn::before{
@@ -140,6 +142,12 @@ header h1{
   display: flex;
   align-content: stretch;
   min-height: 200px;
+}
+
+.device:hover{
+  cursor: pointer;
+  background-color: var(--color-box-hover);
+  transition: .2s;
 }
 
 .device:active{
@@ -239,21 +247,32 @@ header h1{
   padding: 1em;
 }
 
-.add-device{
+.add-device-outer{
   position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.add-device{
+  position: absolute;
   top: 50%;
+  left: 50%;
   padding: 0;
-  margin: auto;
+  max-height: 95%;
   max-width: 500px;
+  width: 95%;
   vertical-align: middle;
   background-color: var(--color-box);
   border-radius: 1em;
-  transform: translateY(-50%);
+  transform: translate(-50%,-50%);
 }
 
 .copyright{
-  text-align: center;
-  padding: 1em;
+  display: block;
+  position: relative;
+  text-align: center !important;
+  padding: 2em 1em 3em 1em;
+  width: 100% !important;
 }
 
 form{
@@ -280,12 +299,17 @@ form{
 label{
   width: 150px;
   padding: .5em;
+  font-style: var(--font-style-body);
+  font-size: var(--font-size-body);
 }
 
 input{
-  flex-grow: 2;
+  flex-grow: 1;
   padding: .5em;
   border-radius: .5em;
+  font-style: var(--font-style-body);
+  font-size: var(--font-size-body);
+  min-width: 150px;
 }
 
 .submit{
@@ -312,13 +336,52 @@ button:hover{
 }
 
 button:disabled{
-  opacity: 0.6;
+  background-color: var(--color-background);
+  color: var(--color-text-default);
+  opacity: 0.4;
   cursor: not-allowed !important;
 }
 
 .row button+button{
   margin-inline-start: 1em;
 }
+
+
+
+/* arrow element */
+.arrow-holder{
+  margin-inline-end: 1em;
+}
+
+.arrow-element {
+  border: solid var(--color-text-default);
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
+}
+
+.arrow-right {
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+}
+
+.arrow-left {
+  transform: rotate(135deg);
+  -webkit-transform: rotate(135deg);
+}
+
+.arrow-up {
+  transform: rotate(-135deg);
+  -webkit-transform: rotate(-135deg);
+}
+
+.arrow-down {
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+}
+
+
+
 
 /* phone / tablet */
 @media (max-width: 1020px) {
