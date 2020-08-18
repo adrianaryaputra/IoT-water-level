@@ -20,4 +20,14 @@ module.exports = Joi.object({
     lat: Joi.number().default(0),
     long: Joi.number().default(0)
   },
+
+  pipe_length: Joi.number().default(process.env.DEFAULT_PIPE_LENGTH),
+
+  alarm: {
+    siaga4: Joi.number().default(process.env.DEFAULT_PIPE_LENGTH),
+    siaga3: Joi.number().default(process.env.DEFAULT_PIPE_LENGTH),
+    siaga2: Joi.number().default(process.env.DEFAULT_PIPE_LENGTH),
+    siaga1: Joi.number().default(process.env.DEFAULT_PIPE_LENGTH),
+    evakuasi: Joi.number().default(process.env.DEFAULT_PIPE_LENGTH),
+  }
 })

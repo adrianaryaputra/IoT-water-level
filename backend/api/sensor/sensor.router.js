@@ -6,7 +6,17 @@ const SensorEngine = require('./sensor.engine');
 
 router.get('/', (req, res) => {
   q = SensorDBModel.find();
+
+  if(req.query.mac_address){
+    mac_raw = req.query.mac_address;
+    mac_filtered = mac_raw.toUpperCase().replace(/:/gi,'-')
+    q.find({
+      mac_address: mac_filtered
+    });
+  }
+
   q.sort({name : 1});
+
   q.then((sensor) => {
     res.json(sensor)
   })
