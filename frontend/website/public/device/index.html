@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="device.css">
+  <title>SMcK - Pengamatan Sungai</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
+  <script src="./device.js" type="module"></script>
+</head>
+<body>
+  <header>
+    <h1>Device Info</h1>
+  </header>
+  <div class="homescreen-back-btn" onclick="window.location = location.origin"><span class="arrow-holder"><i class="arrow-element arrow-left"></i></span>Back to Home Screen</div>
+  <main>
+    <section class="graph">
+    </section>
+    <form>
+      <div class="form-sheet">
+        <div class="col setup-measurement">
+          <h2>Measurement Info :</h2>
+          <div class="row">
+            <label>Device Status</label>
+            <label class="lbl-value" id='status'>OFFLINE</label>
+          </div>
+          <div class="row">
+            <label>Water Level</label>
+            <label class="lbl-value" id='level'>###</label>
+          </div>
+          <div class="row">
+            <label>Temperature</label>
+            <label class="lbl-value" id='temperature'>###</label>
+          </div>
+          <div class="row">
+            <label>Humidity</label>
+            <label class="lbl-value" id='humidity'>###</label>
+          </div>
+        </div>
+        <div class="col setup-device">
+          <h2>Device Status :</h2>
+          <div class="row">
+            <label>MAC Address</label>
+            <label class="lbl-value" id='mac_address'>###</label>
+          </div>
+          <div class="row">
+            <label>Name</label>
+            <div class="input-group">
+              <input type="text" id="name" name="name" value="Unknown Device">
+            </div>
+          </div>
+          <div class="row">
+            <label>Update Rate</label>
+            <div class="input-group">
+              <input type="text" id="lifetime" name="lifetime" value="100">
+              <p class="text-after">second</p>
+            </div>
+          </div>
+          <div class="row">
+            <label>Pipe Length</label>
+            <div class="input-group">
+              <input type="text" id="pipe_length" name="pipe_length" value="4">
+              <p class="text-after">second</p>
+            </div>
+          </div>
+          <div class="row">
+            <label>Last Update</label>
+            <label class="lbl-value" id='last_update'>###</label>
+          </div>
+        </div>
+        <div class="col setup-alarm">
+          <h2>Alarm Parameter :</h2>
+          <div class="row">
+            <label>Siaga 4</label>
+            <div class="input-group">
+              <input type="text" id="siaga4" name="siaga4">
+              <p class="text-after">meter</p>
+            </div>
+          </div>
+          <div class="row">
+            <label>Siaga 3</label>
+            <div class="input-group">
+              <input type="text" id="siaga3" name="siaga3">
+              <p class="text-after">meter</p>
+            </div>
+          </div>
+          <div class="row">
+            <label>Siaga 2</label>
+            <div class="input-group">
+              <input type="text" id="siaga2" name="siaga2">
+              <p class="text-after">meter</p>
+            </div>
+          </div>
+          <div class="row">
+            <label>Siaga 1</label>
+            <div class="input-group">
+              <input type="text" id="siaga1" name="siaga1">
+              <p class="text-after">meter</p>
+            </div>
+          </div>
+          <div class="row">
+            <label>Evakuasi</label>
+            <div class="input-group">
+              <input type="text" id="evakuasi" name="evakuasi">
+              <p class="text-after">meter</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row" id="error-viewer">Yo dam bich</div>
+      <div class="row button-holder">
+        <button class="submit" disabled>Submit</button>
+        <button class="cancel">Cancel</button>
+      </div>
+    </form>
+  </main>
+  <foote class="copyright">
+    copyright &copy; 2020
+  </footer>
+</body>
+</html>

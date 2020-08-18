@@ -1,0 +1,120 @@
+main{
+  margin: 1em;
+  background-color: var(--color-box);
+  border-radius: 1em;
+}
+
+.input-group{
+  position: relative;
+  display: flex;
+  flex-grow: 1;
+}
+
+input[type='text']{
+  width: 100%;
+}
+
+.text-after{
+  display: block;
+  position: absolute;
+  right: 0;
+  top:0;
+  padding: .5em;
+  z-index: 2;
+  color: black;
+}
+
+label{
+  width: 150px;
+}
+
+label:after{
+  display: block;
+  float: right;
+}
+
+#level:after{
+  content: 'meter';
+}
+
+#temperature:after{
+  content: '°C';
+}
+
+#humidity:after{
+  content: '%';
+}
+
+.graph-container{
+  margin: 1em !important;
+  height: 30vh;
+}
+
+.form-sheet{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: stretch;
+}
+
+form{
+  padding: 1em 0;
+}
+
+form h2{
+  font-size: var(--font-size-sensor-name);
+}
+
+.lbl-value{
+  display: inline-block;
+  padding: .5em;
+  background-color: var(--color-background);
+  border-radius: .5em;
+  flex-grow: 1;
+  min-width: 215px;
+}
+
+.homescreen-back-btn{
+  position: relative;
+  margin: 1em;
+  padding: 1em;
+  background-color: var(--color-box);
+  border-radius: 1em;
+}
+
+.homescreen-back-btn:hover{
+  cursor: pointer;
+  background-color: var(--color-box-hover);
+}
+
+.homescreen-back-btn:active{
+  background-color: var(--color-box-hover);
+}
+
+.graph{
+  padding: 3em 0 0 0;
+}
+
+.col{
+  flex-grow: 1;
+  padding: 1em;
+}
+
+.button-holder{
+  padding: 0 1em;
+  justify-content: center;
+}
+
+.button-holder button{
+  flex-grow: 1;
+  max-width: 300px;
+}
+
+#error-viewer{
+  display: none;
+  margin: 0 1em;
+  padding: 1em;
+  background-color: var(--color-state-danger);
+  border-radius: .5em;
+  text-align: center;
+}
