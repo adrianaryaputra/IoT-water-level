@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>SMcK - Pengamatan Sungai</title>
   <link rel="stylesheet" href="./css/style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
+  <script src="./js/main.js" type="module"></script>
 </head>
 <body>
   <header>
@@ -13,6 +15,7 @@
   <main>
     <div class="sensor-list"></div>
     <section class="add-device-holder" style="display: none;">
+    <div class="add-device-outer"></div>
       <div class="add-device">
         <form>
           <div class="col">
@@ -34,17 +37,15 @@
             </div>
           </div>
           <div class="row">
-            <button class="submit" onclick="getAddForm()" disabled>Submit</button>
-            <button class="cancel" onclick="showAdd()">Cancel</button>
+            <button class="submit"disabled>Submit</button>
+            <button class="cancel">Cancel</button>
           </div>
         </form>
       </div>
     </section>
   </main>
   <footer class="copyright">
-    copyright ©️ 2020
+    copyright &copy; 2020
   </footer>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
-  <script src="./js/main.js"></script>
 </body>
 </html>
