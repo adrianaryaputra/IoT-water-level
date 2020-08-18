@@ -167,7 +167,7 @@ devices is an interface to obtain information about all existing device in the s
 retrieve list of devices from database
 
 ### 🔎 Parameter
-`none` - none
+`mac_address` - specify devices by MAC addres to return device details from. Optional.
 
 ### 📥 Response
 A JSON list containing all devices. Example :
@@ -179,6 +179,14 @@ A JSON list containing all devices. Example :
     "name": "Binjai",
     "status": "online",
     "update_time": 600,
+    "pipe_length": 4,
+    "alarm":{
+      "siaga4": 2.5,
+      "siaga3": 2.8,
+      "siaga2": 3,
+      "siaga1": 3.2,
+      "evakuasi": 3.3,
+    },
     "location": {
       "lat": -7.12312,
       "long": 141.32523
@@ -209,7 +217,15 @@ this interface use **application/json** body to send a new device data to server
   "mac_address": "0A-1B-2C-3D-4E-5A",
   "name": "Binjai",
   "update_time": 600,
-  "location": {
+  "pipe_length": 4,
+  "alarm":{       //optional
+    "siaga4": 2.5,
+    "siaga3": 2.8,
+    "siaga2": 3,
+    "siaga1": 3.2,
+    "evakuasi": 3.3,
+  },
+  "location": {   //optional
     "lat": -7.12312,
     "long": 141.32523
   }
