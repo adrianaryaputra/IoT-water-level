@@ -1,6 +1,5 @@
 #define AUTOCONNECT_URI "/"
 #define API_URL "35.184.90.11"
-//#define API_URL "192.168.43.106"
 #define API_PORT 5000
 #define HW_DEFAULT_LIFETIME 2
 
