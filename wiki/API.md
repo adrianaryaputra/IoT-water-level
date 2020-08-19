@@ -137,9 +137,25 @@ this interface use **application/json** body to add new measurement data to serv
 ```json
 {
   "message": "ok", 
-  "param": {
-    "lifetime": 100 // in second
-  }
+  "set": {
+    "_id": "5f2d21f60792f188e80fdaa3",
+    "mac_address": "0A-1B-2C-3D-4E-5A",
+    "name": "Binjai",
+    "status": "online",
+    "update_time": 600,
+    "pipe_length": 4,
+    "alarm":{
+      "siaga4": 2.5,
+      "siaga3": 2.8,
+      "siaga2": 3,
+      "siaga1": 3.2,
+      "evakuasi": 3.3,
+    },
+    "location": {
+      "lat": -7.12312,
+      "long": 141.32523
+    },
+  },
 }
 ```
 

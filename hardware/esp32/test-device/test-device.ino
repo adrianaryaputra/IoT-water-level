@@ -11,6 +11,10 @@
 #define HCSRECHO 2
 #define HW_DEFAULT_PIPELENGTH 4
 
+#define PIR_PIN 35
+#define BUZZ_PIN 17
+#define BUZZ_TIMEOUT 2
+
 #include <WiFi.h>
 #include <ArduinoJson.h>
 #include <WebServer.h>
@@ -36,12 +40,30 @@ void http_POST_measurement();
 void setMeasurementTimeout();
 
 int set_lifetime = HW_DEFAULT_LIFETIME;
+int set_pipelength = HW_DEFAULT_PIPELENGTH;
 unsigned long last_trigger = 0;
+boolean startBuzz = false;
+unsigned long lastBuzz = 0;
+
+void IRAM_ATTR detectsMovement() {
+  Serial.println("MOTION DETECTED!!!");
+  digitalWrite(BUZZ_PIN, HIGH);
+  startBuzz = true;
+  lastBuzz = millis();
+}
+ 
 
 void setup() {
   delay(1000);
   Serial.begin(115200);
-  Serial.println();
+  Serial.println('DEVICE ON');
+
+  pinMode(PIR_PIN, INPUT_PULLUP);
+  pinMode(BUZZ_PIN, OUTPUT);
+  digitalWrite(BUZZ_PIN, HIGH);
+  delay(100);
+  digitalWrite(BUZZ_PIN, LOW);
+  attachInterrupt(digitalPinToInterrupt(PIR_PIN), detectsMovement, RISING);
 
   Config.title = "Water Level";
   Config.menuItems = 
@@ -75,6 +97,12 @@ void loop() {
       last_trigger = millis();
     }
   }
+
+  if(startBuzz && (millis() - lastBuzz > (BUZZ_TIMEOUT*1000))){
+    Serial.println("Motion stopped...");
+    digitalWrite(BUZZ_PIN, LOW);
+    startBuzz = false;
+  }
 }
 
 
@@ -106,8 +134,10 @@ void http_POST_measurement(){
   
   JsonObject measurement = doc.createNestedObject("measurement");
   int distMeasure = distanceSensor.measureDistanceCm();
+  Serial.print("level-raw :");
+  Serial.println(distMeasure);
   if(distMeasure < 0){ distMeasure = 0; }
-  double levelMeasure = HW_DEFAULT_PIPELENGTH - (distMeasure/100.0);
+  double levelMeasure = set_pipelength - (distMeasure/100.0);
   measurement["level"] = levelMeasure;
   measurement["temperature"] = isnan(eventTemp.temperature)? 0 : eventTemp.temperature;
   measurement["humidity"] = isnan(eventHumid.relative_humidity)? 0 : eventHumid.relative_humidity;
@@ -128,9 +158,13 @@ void http_POST_measurement(){
   if(httpCode == HTTP_CODE_OK){
     StaticJsonDocument<256> doc;
     deserializeJson(doc, payload);
-    set_lifetime = doc["set"]["lifetime"];
+    set_lifetime = doc["set"]["update_time"];
+    set_pipelength = doc["set"]["pipe_length"];
   }
   if(set_lifetime <= 0) set_lifetime = HW_DEFAULT_LIFETIME;
+  if(set_pipelength <= 0) set_pipelength = HW_DEFAULT_PIPELENGTH;
   Serial.print("SET Lifetime : ");
   Serial.println(set_lifetime);
+  Serial.print("SET Pipelength : ");
+  Serial.println(set_pipelength);
 }
