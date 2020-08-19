@@ -60,6 +60,10 @@ form.button.cancel.addEventListener('click', () => {
 form.button.submit.addEventListener('click', () => {
   // window.location = window.location;
   // form.error.viewer.style.display = "block"
+
+  form.button.submit.disabled = true;
+  form.button.submit.textContent = "Submitting ..."
+
   Device.PUT({
     mac_address: form.device.mac_address.textContent,
     name: form.device.name.value,
@@ -78,6 +82,8 @@ form.button.submit.addEventListener('click', () => {
       form.status.viewer.style.backgroundColor = "var(--color-state-normal)";
       form.status.viewer.style.display = "block";
       form.status.viewer.textContent = "Update Success ..."
+      form.button.submit.textContent = "Submit"
+      form.button.submit.disabled = false;
       setTimeout(()=>{
         form.status.viewer.style.display = "none";
       }, 3000)
@@ -92,6 +98,8 @@ form.button.submit.addEventListener('click', () => {
   .catch((err) => {
     form.status.viewer.style.display = "block";
     form.status.viewer.textContent = err;
+    form.button.submit.textContent = "Submit"
+    form.button.submit.disabled = false;
     setTimeout(()=>{
       form.status.viewer.style.display = "none";
     }, 3000)
