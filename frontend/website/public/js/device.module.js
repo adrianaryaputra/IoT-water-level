@@ -178,11 +178,11 @@ function checkLevelAlarm(level, alarm){
       case level > alarm.evakuasi:
         return {message: "Evakuasi", class: "status-danger"}; break;
       case level > alarm.siaga1:
-        return {message: "Siaga 1", class: "status-warning"}; break;
+        return {message: "Siaga 1", class: "status-warning-4"}; break;
       case level > alarm.siaga2:
-        return {message: "Siaga 2", class: "status-warning"}; break;
+        return {message: "Siaga 2", class: "status-warning-3"}; break;
       case level > alarm.siaga3:
-        return {message: "Siaga 3", class: "status-warning"}; break;
+        return {message: "Siaga 3", class: "status-warning-2"}; break;
       case level > alarm.siaga4:
         return {message: "Siaga 4", class: "status-warning"}; break;
       default:
