@@ -160,6 +160,11 @@ router.get('/aggregate',(req, res) => {
           "$result.location", 0
         ]
       },
+      alarm: {
+        $arrayElemAt: [
+          "$result.alarm", 0
+        ]
+      },
       measurement: { 
         "$slice": [ "$measurement", parseInt(req.query.limit) || 10 ] 
       }

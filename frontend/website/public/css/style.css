@@ -206,6 +206,13 @@ header h1{
   text-align: center;
   font-size: var(--font-size-measurement-value);
   height: auto;
+  padding: .5em;
+}
+
+.measurement .level-alarm{
+  padding: .5em;
+  text-align: center;
+  border-radius: .25em;
 }
 
 .graph-container{
@@ -406,6 +413,11 @@ button:disabled{
     flex-grow: 1;
   }
 
+  .measurement .level-alarm{
+    max-width: 200px;
+    margin: auto;
+  }
+
 }
 
 
@@ -428,6 +440,7 @@ button:disabled{
     width: auto;
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     padding: .5em 0;
   }
 
@@ -445,6 +458,13 @@ button:disabled{
     height: auto;
     font-size: var(--font-size-sensor-name);
     text-align: right;
+    padding: 0;
+  }
+
+  .measurement .level-alarm{
+    margin: 1em 0 0 0;
+    min-width: 100%;
+    flex-grow: 1;
   }
 
   .separator{

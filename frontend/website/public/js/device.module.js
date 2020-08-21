@@ -48,6 +48,11 @@ function createMeasurementUI(){
   measurementElement.className = "measurement";
 
   const levelElement = createMeasurementPointUI("ketinggian air");
+  const levelAlarmElement = document.createElement('h5');
+  levelAlarmElement.textContent = "###";
+  levelAlarmElement.className = "level-alarm status-danger";
+  levelAlarmElement.style.display = "none";
+  levelElement.appendChild(levelAlarmElement);
   levelElement.classList.add("level");
   const temperatureElement = createMeasurementPointUI("suhu udara");
   temperatureElement.classList.add("temperature");
@@ -165,9 +170,31 @@ function checkOnline(datetime, lifetime){
   return (lastSeenRaw < (lifetime + Param.DEVICE_INACTIVE_AFTER));
 }
 
+function checkLevelAlarm(level, alarm){
+  if(alarm === undefined || alarm === null){
+    return;
+  } else {
+    switch(true){
+      case level > alarm.evakuasi:
+        return {message: "Evakuasi", class: "status-danger"}; break;
+      case level > alarm.siaga1:
+        return {message: "Siaga 1", class: "status-warning"}; break;
+      case level > alarm.siaga2:
+        return {message: "Siaga 2", class: "status-warning"}; break;
+      case level > alarm.siaga3:
+        return {message: "Siaga 3", class: "status-warning"}; break;
+      case level > alarm.siaga4:
+        return {message: "Siaga 4", class: "status-warning"}; break;
+      default:
+        return {message: "Normal", class: "status-normal"}; break;
+    }
+  }
+}
+
 export var Device = {
   createUI,
   checkOnline,
+  checkLevelAlarm,
   GET: deviceGet,
   GET_ONE: deviceGetOne,
   POST: devicePost,

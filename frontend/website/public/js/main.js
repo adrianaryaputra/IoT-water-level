@@ -177,6 +177,7 @@ function updateData(){
 
         const measurementElement = deviceElement.querySelector('.measurement');
         const levelElement = measurementElement.querySelector('.level > h4');
+        const levelAlarmElement = measurementElement.querySelector('.level > .level-alarm');
         const temperatureElement = measurementElement.querySelector('.temperature > h4');
         const humidityElement = measurementElement.querySelector('.humidity > h4');
         const sensorStatusElement = deviceElement.querySelector('.info > h5');
@@ -189,8 +190,17 @@ function updateData(){
         });
 
         nameElement.textContent = device.name;
+        const currLevel = parseFloat(device.measurement[0].level).toFixed(2);
+        levelElement.textContent = currLevel;
+        const alarmResult = Device.checkLevelAlarm(currLevel, device.alarm);
+        if(alarmResult === undefined){
+          levelAlarmElement.style.display = "none";
+        } else {
+          levelAlarmElement.style.display = "block";
+          levelAlarmElement.textContent = alarmResult.message;
+          levelAlarmElement.className = `level-alarm ${alarmResult.class}`;
+        }
 
-        levelElement.textContent = parseFloat(device.measurement[0].level).toFixed(2);
         temperatureElement.textContent = parseFloat(device.measurement[0].temperature).toFixed(2);
         humidityElement.textContent = parseFloat(device.measurement[0].humidity).toFixed(2);
 
