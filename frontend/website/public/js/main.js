@@ -15,8 +15,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // search add parameter
   var URLParAdd = urlParams.get('add');
+
+  // if add parameter exist
   if(URLParAdd != null){
-    showAdd();
+    
+    // check if device exist
+    Device.GET_ONE(URLParAdd)
+    .then((arr) => {
+      // if not exist show add device
+      if(arr.length == 0){
+        showAdd();
+      // if exist go to device setting
+      } else {
+        window.location = `${location.origin}/device/?mac=${URLParAdd}`
+      }
+    })
+    .catch((err) => {
+      window.location = location.href;
+    });
+
   }
 });
 
