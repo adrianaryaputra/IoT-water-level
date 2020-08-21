@@ -37,9 +37,9 @@
     --color-box: hsl(255, 0%, 10%);
     --color-box-hover: hsl(255, 0%, 0%);
     --color-text-default: hsl(0, 0%, 92%);
-    --color-text-accent: hsl(0, 0%, 92%);
+    --color-text-accent: hsl(0, 0%, 0%);
     --color-state-danger: hsl(0, 70%, 56%);
-    --color-state-warning: hsl(46, 81%, 55%);
+    --color-state-warning: hsl(46, 100%, 40%);
     --color-state-normal:hsl(123, 91%, 37%);
   }
 }
