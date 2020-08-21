@@ -34,12 +34,16 @@ AutoConnectConfig Config;
 DHT_Unified dht(DHTPIN, DHTTYPE);
 UltraSonicDistanceSensor distanceSensor(HCSRTRIG, HCSRECHO);
 
+String macAddr = WiFi.macAddress();
+
 void redirectPage();
 void http_POST_measurement();
 void setMeasurementTimeout();
 
 int set_lifetime = HW_DEFAULT_LIFETIME;
-int set_pipelength = HW_DEFAULT_PIPELENGTH;
+int get_lifetime = HW_DEFAULT_LIFETIME;
+double set_pipelength = HW_DEFAULT_PIPELENGTH;
+double get_pipelength = HW_DEFAULT_PIPELENGTH;
 unsigned long last_trigger = 0;
 boolean startBuzz = false;
 unsigned long lastBuzz = 0;
@@ -50,19 +54,18 @@ void IRAM_ATTR detectsMovement() {
   startBuzz = true;
   lastBuzz = millis();
 }
- 
+
 
 void setup() {
   delay(1000);
   Serial.begin(115200);
-  Serial.println('DEVICE ON');
+  macAddr.replace(":","-");
 
   pinMode(PIR_PIN, INPUT_PULLUP);
   pinMode(BUZZ_PIN, OUTPUT);
   digitalWrite(BUZZ_PIN, HIGH);
   delay(100);
   digitalWrite(BUZZ_PIN, LOW);
-  attachInterrupt(digitalPinToInterrupt(PIR_PIN), detectsMovement, RISING);
 
   Config.title = "Water Level";
   Config.menuItems = 
@@ -75,7 +78,7 @@ void setup() {
   Config.tickerPort = 22;
   Config.tickerOn = LOW;
   Config.autoReconnect = true;
-  Config.hostName = "adrianaryaputra";
+  Config.hostName = macAddr;
   Portal.config(Config);
 
   if (Portal.begin()) {
@@ -85,6 +88,8 @@ void setup() {
   dht.begin();
 
   Server.on("/", redirectPage);
+  
+  attachInterrupt(digitalPinToInterrupt(PIR_PIN), detectsMovement, RISING);
 }
 
 void loop() {
@@ -128,7 +133,7 @@ void http_POST_measurement(){
   String httpLink = "/record";
   
   StaticJsonDocument<512> doc;
-  doc["mac_address"] = WiFi.macAddress();
+  doc["mac_address"] = macAddr;
   doc["lifetime"] = set_lifetime;
   
   JsonObject measurement = doc.createNestedObject("measurement");
@@ -146,6 +151,8 @@ void http_POST_measurement(){
   Serial.print("Send : ");
   Serial.println(httpBody);
 
+  
+
   HTTPClient http;
   http.begin(String("http://") + API_URL + ":" + API_PORT + httpLink);
   http.addHeader("Content-Type", "application/json");
@@ -155,13 +162,17 @@ void http_POST_measurement(){
   Serial.print(" | ");
   Serial.println(payload);
   if(httpCode == HTTP_CODE_OK){
-    StaticJsonDocument<256> doc;
+    StaticJsonDocument<1024> doc;
     deserializeJson(doc, payload);
-    set_lifetime = doc["set"]["update_time"];
-    set_pipelength = doc["set"]["pipe_length"];
+    get_lifetime = doc["set"]["update_time"];
+    get_pipelength = doc["set"]["pipe_length"];
+    Serial.print("db updatetime : ");
+    Serial.println(get_lifetime);
+    Serial.print("db Pipelength : ");
+    Serial.println(get_pipelength);
   }
-  if(set_lifetime <= 0) set_lifetime = HW_DEFAULT_LIFETIME;
-  if(set_pipelength <= 0) set_pipelength = HW_DEFAULT_PIPELENGTH;
+  if(get_lifetime > 0) set_lifetime = get_lifetime;
+  if(get_pipelength > 0) set_pipelength = get_pipelength;
   Serial.print("SET Lifetime : ");
   Serial.println(set_lifetime);
   Serial.print("SET Pipelength : ");
