@@ -12,6 +12,9 @@
   --color-text-default: hsl(0, 0%, 13%);
   --color-text-accent: hsl(0, 0%, 95%);
   --color-state-danger: hsl(0, 70%, 35%);
+  --color-state-warning-4: hsl(22, 100%, 45%);
+  --color-state-warning-3: hsl(30, 100%, 45%);
+  --color-state-warning-2: hsl(38, 100%, 45%);
   --color-state-warning: hsl(46, 81%, 45%);
   --color-state-normal:hsl(123, 91%, 27%);
   --color-test: hsla(210, 64%, 31%, 0.2);
