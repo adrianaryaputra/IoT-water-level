@@ -5,11 +5,11 @@ module.exports = (override) => {
 
   const measurement = {
     mac_address: faker.internet.mac(),
-    lifetime: 100,
+    lifetime: faker.random.number({min:1, max:100, precision:1}),
     measurement: {
-      level: 3.12,
-      temperature: 28.56,
-      humidity: 54.23,
+      level: faker.random.number({min:1, max:4, precision:0.01}),
+      temperature: faker.random.number({min:28, max:30, precision:0.01}),
+      humidity: faker.random.number({min:49, max:51, precision:0.01}),
     },
   }
 
