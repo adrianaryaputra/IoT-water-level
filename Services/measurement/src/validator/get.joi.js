@@ -7,7 +7,8 @@ module.exports = Joi.object({
     .pattern(
       /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/
     )
-    .replace(/:/g, '-'),
+    .replace(/:/g, '-')
+    .uppercase(),
 
   date_from: Joi.date(),
   date_to: Joi.date(),
