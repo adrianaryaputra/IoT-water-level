@@ -1,3 +1,4 @@
+const utils = require('../../../_shared_/utils')
 const measurementApiSchema = require('./measurement.joi');
 const httpGetQuerySchema = require('./get.joi');
 
@@ -24,6 +25,6 @@ function validateJoi({obj, schema}){
     throw error;
   }
   else{
-    return value;
+    return utils.obj.removeEmptyKey(value);
   }
 }

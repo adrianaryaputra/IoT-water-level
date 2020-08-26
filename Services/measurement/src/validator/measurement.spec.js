@@ -1,5 +1,6 @@
 const validator = require('.');
 const makeFakeMeasurement = require('../../__test__/fixture/fakeMeasurement');
+const utils = require('../../../_shared_/utils');
 const { ValidationError } = require('joi');
 
 describe('validate measurement schema', () => {
@@ -85,7 +86,7 @@ describe('validate measurement schema', () => {
     measurement.measurement.temperature = undefined;
     const check = validator.validateApi(measurement);
     measurement.mac_address = measurement.mac_address.replace(/:/g,'-').toUpperCase();
-    expect(check).toMatchObject(measurement);
+    expect(check).toMatchObject(utils.obj.removeEmptyKey(measurement));
   });
 
 
@@ -94,7 +95,7 @@ describe('validate measurement schema', () => {
     measurement.measurement.humidity = undefined;
     const check = validator.validateApi(measurement);
     measurement.mac_address = measurement.mac_address.replace(/:/g,'-').toUpperCase();
-    expect(check).toMatchObject(measurement);
+    expect(check).toMatchObject(utils.obj.removeEmptyKey(measurement));
   });
   
 });
