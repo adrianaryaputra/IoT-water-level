@@ -1,7 +1,6 @@
 module.exports = ({modelDB}) => {
 
   return () => {
-    this.modelDB = modelDB;
     return _createMethod();
   }
 
@@ -16,6 +15,7 @@ module.exports = ({modelDB}) => {
       limit,
       submit,
       deleteAllMac,
+      deleteObj,
       baseQuery: q,
     })
   }
@@ -63,6 +63,10 @@ module.exports = ({modelDB}) => {
 
   function deleteAllMac(mac_address) {
     return modelDB.deleteMany({mac_address});
+  }
+
+  function deleteObj(obj) {
+    return modelDB.deleteMany(obj);
   }
 
 }
