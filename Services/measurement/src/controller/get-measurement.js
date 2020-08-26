@@ -1,7 +1,4 @@
-const validator = require('../validator');
-const {listMeasurement} = require('../use-cases');
-
-module.exports = function({ listMeasurement }){
+module.exports = function({ listMeasurement, validator }){
   return async function getMeasurement(httpRequest){
 
     const headers = {
@@ -10,20 +7,23 @@ module.exports = function({ listMeasurement }){
 
     const nonvalidatedQuery = {
       mac_address: httpRequest.query.mac_address,
-      date_from: new Date(httpRequest.query.date_from),
-      date_to: new Date(httpRequest.query.date_to),
-      limit: parseInt(httpRequest.query.limit),
+      date_from: httpRequest.query.date_from,
+      date_to: httpRequest.query.date_to,
+      limit: httpRequest.query.limit,
     }
     
-    const validatedQuery = validator.validateGetQuery(nonvalidatedQuery);
-
     try{
 
+      const validatedQuery = validator.validateGetQuery(nonvalidatedQuery);
       const measurementBody = await listMeasurement(validatedQuery);
+      
       return {
         headers: headers,
         statusCode: 200,
-        body: measurementBody,
+        body: {
+          success: true,
+          payload: measurementBody,
+        },
       }
 
     } catch(e) {
@@ -32,6 +32,7 @@ module.exports = function({ listMeasurement }){
         headers: headers,
         statusCode: 400,
         body: {
+          success: false,
           error: e.message,
         },
       }
