@@ -1,10 +1,8 @@
 module.exports = ({modelDB}) => {
 
-  const baseQuery = modelDB.find({});
+  return _createMethod();
 
-  return _createMethod(baseQuery);
-
-  function _createMethod(q = baseQuery){
+  function _createMethod(q = modelDB.find({})){
     return Object.freeze({
       findAll,
       findByMac,
@@ -20,35 +18,35 @@ module.exports = ({modelDB}) => {
   }
 
   function findAll() {
-    return _createMethod(baseQuery);
+    return _createMethod(this.baseQuery);
   }
 
   function findByMac(mac_address) {
-    const q = baseQuery.find({mac_address});
+    const q = this.baseQuery.find({mac_address});
     return _createMethod(q);
   }
 
   function dateFrom(date) {
-    const q = baseQuery.find({
+    const q = this.baseQuery.find({
       timestamp: {$gte: date}
     });
     return _createMethod(q);
   }
 
   function dateTo(date) {
-    const q = baseQuery.find({
+    const q = this.baseQuery.find({
       timestamp: {$lte: date}
     });
     return _createMethod(q);
   }
 
   function sort(order) {
-    const q = baseQuery.sort({timestamp: order});
+    const q = this.baseQuery.sort({timestamp: order});
     return _createMethod(q);
   }
 
   function limit(value) {
-    const q = baseQuery.limit(value);
+    const q = this.baseQuery.limit(value);
     return _createMethod(q);
   }
 
@@ -57,7 +55,7 @@ module.exports = ({modelDB}) => {
   }
 
   function submit() {
-    return baseQuery.exec();
+    return this.baseQuery.exec();
   }
 
   function deleteAllMac(mac_address) {
