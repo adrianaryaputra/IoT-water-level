@@ -1,6 +1,9 @@
 module.exports = ({modelDB}) => {
 
-  return _createMethod();
+  return () => {
+    this.modelDB = modelDB;
+    return _createMethod();
+  }
 
   function _createMethod(q = modelDB.find({})){
     return Object.freeze({

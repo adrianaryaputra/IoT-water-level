@@ -7,7 +7,7 @@ const makeMeasurementDBModel = require('./measurement.model');
 const makeMeasurementDB = require('./measurement');
 
 const measurementDBModel = makeMeasurementDBModel({database: mongoose});
-
+const measurementDB = makeMeasurementDB({modelDB: measurementDBModel});
 
 describe('measurement database model', ()=> {
 
@@ -24,15 +24,13 @@ describe('measurement database model', ()=> {
 
 
   it('can create new measurement', () => {
-    
-    const measurementDB = makeMeasurementDB({modelDB: measurementDBModel});
 
     // generate a random mock data
     var mock = fakeMeasurement({timestamp: new Date()});
     mock.mac_address = mock.mac_address.toUpperCase();
 
     // try to create
-    return measurementDB.create(mock)
+    return measurementDB().create(mock)
       .then(doc => {
         expect(doc).toMatchObject(mock);
       })
@@ -42,8 +40,6 @@ describe('measurement database model', ()=> {
 
   it('reject incomplete mac address', () => {
 
-    const measurementDB = makeMeasurementDB({modelDB: measurementDBModel});
-
     // generate a random mock data with invalid measurement
     var mock = fakeMeasurement({
       timestamp: new Date(),
@@ -52,7 +48,7 @@ describe('measurement database model', ()=> {
     if(mock.mac_address)
       mock.mac_address = mock.mac_address.toUpperCase();
 
-    return measurementDB.create(mock)
+    return measurementDB().create(mock)
       .catch(err => {
         expect(err.message).toContain('mac_address');
       })
@@ -62,8 +58,6 @@ describe('measurement database model', ()=> {
 
   it('reject invalid mac address', () => {
 
-    const measurementDB = makeMeasurementDB({modelDB: measurementDBModel});
-
     // generate a random mock data with invalid measurement
     var mock = fakeMeasurement({
       timestamp: new Date(),
@@ -72,7 +66,7 @@ describe('measurement database model', ()=> {
     if(mock.mac_address)
       mock.mac_address = mock.mac_address.toUpperCase();
 
-    return measurementDB.create(mock)
+    return measurementDB().create(mock)
       .catch(err => {
         expect(err.message).toContain('mac_address');
       })
@@ -82,13 +76,11 @@ describe('measurement database model', ()=> {
 
   it('reject incomplete timestamp', () => {
 
-    const measurementDB = makeMeasurementDB({modelDB: measurementDBModel});
-
     // generate a random mock data with invalid measurement
     var mock = fakeMeasurement();
     mock.mac_address = mock.mac_address.toUpperCase();
 
-    return measurementDB.create(mock)
+    return measurementDB().create(mock)
       .catch(err => {
         expect(err.message).toContain('timestamp');
       })
@@ -98,8 +90,6 @@ describe('measurement database model', ()=> {
 
   it('reject incomplete lifetime', () => {
 
-    const measurementDB = makeMeasurementDB({modelDB: measurementDBModel});
-
     // generate a random mock data with invalid measurement
     var mock = fakeMeasurement({
       timestamp: new Date(),
@@ -107,7 +97,7 @@ describe('measurement database model', ()=> {
     });
     mock.mac_address = mock.mac_address.toUpperCase();
 
-    return measurementDB.create(mock)
+    return measurementDB().create(mock)
       .catch(err => {
         expect(err.message).toContain('lifetime');
       })
@@ -117,8 +107,6 @@ describe('measurement database model', ()=> {
 
   it('reject incomplete measurement', () => {
 
-    const measurementDB = makeMeasurementDB({modelDB: measurementDBModel});
-
     // generate a random mock data with invalid measurement
     var mock = fakeMeasurement({
       timestamp: new Date(),
@@ -126,7 +114,7 @@ describe('measurement database model', ()=> {
     });
     mock.mac_address = mock.mac_address.toUpperCase();
 
-    return measurementDB.create(mock)
+    return measurementDB().create(mock)
       .catch(err => {
         expect(err.message).toContain('measurement.level');
       })
@@ -136,8 +124,6 @@ describe('measurement database model', ()=> {
 
   it('can create multiple new measurement', async () => {
 
-    const measurementDB = makeMeasurementDB({modelDB: measurementDBModel});
-
     // generate few random mock data
     const mock = Array.from({length:3}).map(() => {
       var f = fakeMeasurement({timestamp: new Date()});
@@ -146,7 +132,7 @@ describe('measurement database model', ()=> {
     })
 
     // create those data to database
-    doc = await measurementDB.create(mock);
+    doc = await measurementDB().create(mock);
     expect(doc).toMatchObject(mock);
 
   });
@@ -154,8 +140,6 @@ describe('measurement database model', ()=> {
 
   it('can find all measurement', async () => {
 
-    const measurementDB = makeMeasurementDB({modelDB: measurementDBModel});
-
     // generate few random mock data
     const mock = Array.from({length:3}).map(() => {
       var f = fakeMeasurement({timestamp: new Date()});
@@ -164,9 +148,9 @@ describe('measurement database model', ()=> {
     })
 
     // create those data to database
-    await measurementDB.create(mock)
+    await measurementDB().create(mock)
 
-    return measurementDB.findAll().submit()
+    return measurementDB().findAll().submit()
       .then(doc => {
         expect(doc).toMatchObject(mock);
       })
@@ -176,8 +160,6 @@ describe('measurement database model', ()=> {
 
   it('can find all measurement with specific mac address', async () => {
 
-    const measurementDB = makeMeasurementDB({modelDB: measurementDBModel});
-
     // generate few random mock data
     var mock = Array.from({length:5}).map(() => {
       var f = fakeMeasurement({timestamp: new Date()});
@@ -191,9 +173,9 @@ describe('measurement database model', ()=> {
     mock[4].mac_address = dummy_similar_mac;
 
     // create those data to database
-    await measurementDB.create(mock)
+    await measurementDB().create(mock)
 
-    return measurementDB.findByMac(dummy_similar_mac).submit()
+    return measurementDB().findByMac(dummy_similar_mac).submit()
       .then(doc => {
         expect(doc).toMatchObject([mock[2], mock[4]]);
       })
@@ -203,8 +185,6 @@ describe('measurement database model', ()=> {
 
   it('can delete all measurement with specific mac address', async () => {
 
-    const measurementDB = makeMeasurementDB({modelDB: measurementDBModel});
-
     // generate few random mock data
     var mock = Array.from({length:5}).map(() => {
       var f = fakeMeasurement({timestamp: new Date()});
@@ -218,9 +198,9 @@ describe('measurement database model', ()=> {
     mock[4].mac_address = dummy_similar_mac;
 
     // create those data to database
-    await measurementDB.create(mock)
+    await measurementDB().create(mock)
 
-    return measurementDB.deleteAllMac(dummy_similar_mac)
+    return measurementDB().deleteAllMac(dummy_similar_mac)
       .then(doc => {
         expect(doc).toMatchObject({
           deletedCount: 2,
@@ -233,8 +213,6 @@ describe('measurement database model', ()=> {
 
   it('can limit result length', async () => {
 
-    const measurementDB = makeMeasurementDB({modelDB: measurementDBModel});
-
     // generate few random mock data
     const mock = Array.from({length:20}).map(() => {
       var f = fakeMeasurement({timestamp: new Date()});
@@ -243,11 +221,11 @@ describe('measurement database model', ()=> {
     })
 
     // create those data to database
-    await measurementDB.create(mock)
+    await measurementDB().create(mock)
 
     const limit_to = 5;
 
-    return measurementDB.findAll().limit(limit_to).submit()
+    return measurementDB().findAll().limit(limit_to).submit()
       .then(doc => {
         expect(doc.length).toBe(limit_to);
       })
@@ -256,8 +234,6 @@ describe('measurement database model', ()=> {
 
 
   it('can sort ascending result by timestamp', async () => {
-
-    const measurementDB = makeMeasurementDB({modelDB: measurementDBModel});
 
     // generate few random mock data
     const mock = Array.from({length:5}).map(() => {
@@ -269,9 +245,9 @@ describe('measurement database model', ()=> {
     })
 
     // create those data to database
-    await measurementDB.create(mock)
+    await measurementDB().create(mock)
 
-    return measurementDB.findAll().sort(1).submit()
+    return measurementDB().findAll().sort(1).submit()
       .then(doc => {
         expect(
           doc[0].timestamp <= doc[4].timestamp
@@ -283,8 +259,6 @@ describe('measurement database model', ()=> {
 
   it('can sort descending result by timestamp', async () => {
 
-    const measurementDB = makeMeasurementDB({modelDB: measurementDBModel});
-
     // generate few random mock data
     const mock = Array.from({length:5}).map(() => {
       var f = fakeMeasurement({
@@ -295,9 +269,9 @@ describe('measurement database model', ()=> {
     })
 
     // create those data to database
-    await measurementDB.create(mock)
+    await measurementDB().create(mock)
 
-    return measurementDB.findAll().sort(-1).submit()
+    return measurementDB().findAll().sort(-1).submit()
       .then(doc => {
         expect(
           doc[0].timestamp >= doc[4].timestamp
@@ -309,8 +283,6 @@ describe('measurement database model', ()=> {
 
   it('can get result after certain date', async () => {
 
-    const measurementDB = makeMeasurementDB({modelDB: measurementDBModel});
-
     // generate few random mock data
     var mock = Array.from({length:5}).map(() => {
       var f = fakeMeasurement({
@@ -332,9 +304,9 @@ describe('measurement database model', ()=> {
     cmpDate = mock[2].timestamp;
 
     // create those data to database
-    await measurementDB.create(mock)
+    await measurementDB().create(mock)
 
-    return measurementDB.findAll().dateFrom(cmpDate).submit()
+    return measurementDB().findAll().dateFrom(cmpDate).submit()
       .then(doc => {
         expect(doc).toMatchObject(mock.slice(2,5));
       });
@@ -344,8 +316,6 @@ describe('measurement database model', ()=> {
 
   it('can get result before certain date', async () => {
 
-    const measurementDB = makeMeasurementDB({modelDB: measurementDBModel});
-
     // generate few random mock data
     var mock = Array.from({length:5}).map(() => {
       var f = fakeMeasurement({
@@ -367,9 +337,9 @@ describe('measurement database model', ()=> {
     cmpDate = mock[2].timestamp;
 
     // create those data to database
-    await measurementDB.create(mock)
+    await measurementDB().create(mock)
 
-    return measurementDB.findAll().dateTo(cmpDate).submit()
+    return measurementDB().findAll().dateTo(cmpDate).submit()
       .then(doc => {
         expect(doc).toMatchObject(mock.slice(0,3));
       });
