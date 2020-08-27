@@ -1,5 +1,5 @@
 const supertest = require('supertest');
-const app = require('..')
+const {app, server} = require('..')
 
 const {
   DB,
@@ -21,6 +21,7 @@ describe('simulate API GET call', () => {
   afterAll(async () => {
     await measurementDB().deleteObj({});
     DB.connection.close();
+    server.close();
   });
 
 
