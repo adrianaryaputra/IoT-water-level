@@ -177,8 +177,10 @@ describe('measurement database model', ()=> {
 
     return measurementDB().findByMac(dummy_similar_mac).submit()
       .then(doc => {
-        expect(doc).toMatchObject([mock[2], mock[4]]);
-      })
+        doc.forEach((measurement) => {
+          expect(measurement.mac_address).toBe(dummy_similar_mac);
+        });
+      });
 
   });
 
@@ -308,7 +310,9 @@ describe('measurement database model', ()=> {
 
     return measurementDB().findAll().dateFrom(cmpDate).submit()
       .then(doc => {
-        expect(doc).toMatchObject(mock.slice(2,5));
+        doc.forEach(measurement => {
+          measurement.timestamp >= cmpDate
+        });
       });
 
   });
@@ -341,7 +345,9 @@ describe('measurement database model', ()=> {
 
     return measurementDB().findAll().dateTo(cmpDate).submit()
       .then(doc => {
-        expect(doc).toMatchObject(mock.slice(0,3));
+        doc.forEach(measurement => {
+          measurement.timestamp <= cmpDate
+        });
       });
 
   });
