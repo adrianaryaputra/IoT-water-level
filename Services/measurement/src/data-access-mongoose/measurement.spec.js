@@ -168,7 +168,7 @@ describe('measurement database model', ()=> {
     })
     
     // change mac address of some data
-    const dummy_similar_mac = "AA:BB:CC:DD:EE:FF"
+    const dummy_similar_mac = "AA-BB-CC-DD-EE-FF"
     mock[2].mac_address = dummy_similar_mac;
     mock[4].mac_address = dummy_similar_mac;
 
@@ -193,7 +193,7 @@ describe('measurement database model', ()=> {
     })
     
     // change mac address of some data
-    const dummy_similar_mac = "AA:BB:CC:DD:EE:FF"
+    const dummy_similar_mac = "AA-BB-CC-DD-EE-FF"
     mock[2].mac_address = dummy_similar_mac;
     mock[4].mac_address = dummy_similar_mac;
 
