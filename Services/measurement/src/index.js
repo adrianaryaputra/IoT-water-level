@@ -15,9 +15,7 @@ app.use(cors());
 
 app.get('/measurement', httpCallback(getMeasurement));
 
-server = app.listen(process.env.API_PORT, () => {
-  console.log(`listening on port ${process.env.API_PORT}`);
-});
+server = app.listen(process.env.API_PORT);
 
 module.exports = {
   app,
