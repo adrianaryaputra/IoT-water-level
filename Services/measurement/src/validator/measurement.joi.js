@@ -1,21 +1,22 @@
 const Joi = require('joi');
+const Config = require('../config');
 
 const measurementSchema = Joi.object().keys({
   level: Joi
     .number()
     .required()
-    .min(parseInt(process.env.LEVEL_MIN))
-    .max(parseInt(process.env.LEVEL_MAX)),
+    .min(parseInt(Config.LEVEL_MIN))
+    .max(parseInt(Config.LEVEL_MAX)),
 
   temperature: Joi
     .number()
-    .min(parseInt(process.env.TEMP_MIN))
-    .max(parseInt(process.env.TEMP_MAX)),
+    .min(parseInt(Config.TEMP_MIN))
+    .max(parseInt(Config.TEMP_MAX)),
 
   humidity: Joi
     .number()
-    .min(parseInt(process.env.HUMIDITY_MIN))
-    .max(parseInt(process.env.HUMIDITY_MAX)),
+    .min(parseInt(Config.HUMIDITY_MIN))
+    .max(parseInt(Config.HUMIDITY_MAX)),
 })
 
 module.exports = Joi.object().keys({
@@ -31,8 +32,8 @@ module.exports = Joi.object().keys({
   lifetime: Joi
     .number()
     .required()
-    .min(parseInt(process.env.UPDATE_MIN))
-    .max(parseInt(process.env.UPDATE_MAX)),
+    .min(parseInt(Config.UPDATE_MIN))
+    .max(parseInt(Config.UPDATE_MAX)),
 
   measurement: measurementSchema.required(),
   

@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
+const Config = require('../config');
 
-mongoose.connect(process.env.MEASUREMENT_DB_ADDRESS, {
+mongoose.connect(Config.DB_ADDRESS, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useFindAndModify: false,

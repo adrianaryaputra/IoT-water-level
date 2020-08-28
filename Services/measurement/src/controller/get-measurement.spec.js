@@ -1,5 +1,6 @@
 const supertest = require('supertest');
 const {app, server} = require('..')
+const Config = require('../config');
 
 const {
   DB,
@@ -7,8 +8,7 @@ const {
 } = require('../data-access-mongoose');
 
 const fakeMeasurement = require('../../__test__/fixture/fakeMeasurement');
-
-const HTTP_ADDRESS = '/measurement';
+const HTTP_ADDRESS = Config.HTTP_ADDRESS;
 
 describe('simulate API GET call', () => {
 
@@ -36,6 +36,7 @@ describe('simulate API GET call', () => {
     // GET the data
     return supertest(app)
       .get(HTTP_ADDRESS)
+      .expect(200)
       .then(response => {
         expect(response.body.success).toBe(true);
         expect(response.body.payload).toMatchObject([mock]);
@@ -66,6 +67,7 @@ describe('simulate API GET call', () => {
     return supertest(app)
       .get(HTTP_ADDRESS)
       .query({mac_address: dummy_similar_mac})
+      .expect(200)
       .then(response => {
         expect(response.body.success).toBe(true);
         response.body.payload.forEach((measurement) => {
@@ -95,6 +97,7 @@ describe('simulate API GET call', () => {
     return supertest(app)
       .get(HTTP_ADDRESS)
       .query({limit: setLimit})
+      .expect(200)
       .then(response => {
         expect(response.body.success).toBe(true);
         expect(response.body.payload.length).toBe(Math.min(setLimit, 5));

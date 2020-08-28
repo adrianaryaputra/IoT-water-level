@@ -1,4 +1,5 @@
-const Joi = require('joi')
+const Joi = require('joi');
+const Config = require('../config');
 
 const MacSchema = Joi
   .string()
@@ -19,9 +20,9 @@ module.exports = Joi.object({
   date_to: Joi.date(),
   limit: Joi
     .number()
-    .max(1000)
+    .max(Config.QUERY_LIMIT)
     .min(1)
-    .default(10),
+    .default(Config.QUERY_DEFAULT),
 
 });
 
