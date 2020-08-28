@@ -23,7 +23,7 @@ describe('simulate request for measurement list', () => {
   });
 
   
-  it('should be able to get data', async () => {
+  it('should be able to list measurement', async () => {
 
     var mock = fakeMeasurement({timestamp: new Date()});
     mock.mac_address = mock.mac_address.toUpperCase();
@@ -37,7 +37,7 @@ describe('simulate request for measurement list', () => {
   });
 
 
-  it('can GET measurement with specific mac address', async () => {
+  it('can list measurement with specific mac address', async () => {
 
     // generate few random mock data
     var mock = Array.from({length:5}).map(() => {
@@ -66,7 +66,43 @@ describe('simulate request for measurement list', () => {
   });
 
 
-  it('can limit GET measurement result ', async () => {
+  it('can list measurement with multiple specific mac address', async () => {
+
+    // generate few random mock data
+    var mock = Array.from({length:5}).map(() => {
+      var f = fakeMeasurement({
+        timestamp: new Date(parseInt(Math.random() * Date.now()))
+      });
+      f.mac_address = f.mac_address.toUpperCase();
+      return f;
+    })
+
+    // change mac address of some data
+    const dummy_similar_mac_1 = "AA-BB-CC-DD-EE-FF"
+    const dummy_similar_mac_2 = "AA-BB-CC-DD-EE-00"
+    mock[2].mac_address = dummy_similar_mac_1;
+    mock[4].mac_address = dummy_similar_mac_2;
+
+    // create those data to database
+    await measurementDB().create(mock)
+
+    return listMeasurement({
+      mac_address: [
+        dummy_similar_mac_1,
+        dummy_similar_mac_2,
+      ]})
+      .then(result => {
+        result.forEach((measurement) => {
+          const inArray = [dummy_similar_mac_1, dummy_similar_mac_2]
+            .includes(measurement.mac_address);
+          expect(inArray).toBe(true);
+        });
+      });
+
+  })
+
+
+  it('can limit list result ', async () => {
 
     const setLimit = 2
 
@@ -90,7 +126,7 @@ describe('simulate request for measurement list', () => {
   });
 
 
-  it('can GET measurement result after certain date ', async () => {
+  it('can list measurement result after certain date ', async () => {
 
     const setDate = new Date('1990-01-01');
 
@@ -117,7 +153,7 @@ describe('simulate request for measurement list', () => {
   });
 
 
-  it('can GET measurement result before certain date ', async () => {
+  it('can list measurement result before certain date ', async () => {
 
     const setDate = new Date('1990-01-01');
 
