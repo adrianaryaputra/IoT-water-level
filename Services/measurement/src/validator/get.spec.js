@@ -17,6 +17,20 @@ describe('validate measurement schema', () => {
   });
 
 
+  it('can accept array of mac address', () => {
+    const fakeMac = [
+      "AA-BB-CC-DD-EE-00",
+      "AA-BB-CC-DD-EE-01"
+    ];
+    const fakeGetQuery = makeFakeGetQuery({
+      mac_address: fakeMac,
+    });
+
+    const check = validator.validateGetQuery(fakeGetQuery);
+    expect(check).toMatchObject(fakeGetQuery);
+  });
+
+
   it('deny invalid mac address', () => {
     const fakeGetQuery = makeFakeGetQuery({mac_address: 'invalid'});
     expect(() => {
