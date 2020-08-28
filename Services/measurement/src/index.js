@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const cors = require('cors');
+const Config = require('./config');
 
 const httpCallback = require('../../_shared_/httpCallback/express.callback');
 
@@ -11,9 +11,8 @@ const {
 
 const app = express()
 app.use(bodyParser.json());
-app.use(cors());
 
-app.get('/measurement', httpCallback(getMeasurement));
+app.get(Config.HTTP_ADDRESS, httpCallback(getMeasurement));
 
 server = app.listen(process.env.API_PORT);
 
