@@ -27,7 +27,6 @@ describe('simulate request for measurement list', () => {
   it('should be able to post data', async () => {
 
     var mock = fakeMeasurement({timestamp: new Date()});
-    mock.mac_address = mock.mac_address.toUpperCase();
     
     await createMeasurement(mock)
 
@@ -45,7 +44,6 @@ describe('simulate request for measurement list', () => {
   it('should reject no timestamp', async () => {
 
     var mock = fakeMeasurement({timestamp: undefined});
-    mock.mac_address = mock.mac_address.toUpperCase();
     
     return createMeasurement(mock)
       .catch(e => {
@@ -76,7 +74,6 @@ describe('simulate request for measurement list', () => {
       timestamp: new Date(),
       measurement: undefined,
     });
-    mock.mac_address = mock.mac_address.toUpperCase();
 
     return createMeasurement(mock)
       .catch(e => {
@@ -92,7 +89,6 @@ describe('simulate request for measurement list', () => {
       timestamp: new Date(),
       lifetime: undefined,
     });
-    mock.mac_address = mock.mac_address.toUpperCase();
 
     return createMeasurement(mock)
       .catch(e => {

@@ -27,7 +27,6 @@ describe('measurement database model', ()=> {
 
     // generate a random mock data
     var mock = fakeMeasurement({timestamp: new Date()});
-    mock.mac_address = mock.mac_address.toUpperCase();
 
     // try to create
     return measurementDB().create(mock)
@@ -45,8 +44,6 @@ describe('measurement database model', ()=> {
       timestamp: new Date(),
       mac_address: undefined,
     });
-    if(mock.mac_address)
-      mock.mac_address = mock.mac_address.toUpperCase();
 
     return measurementDB().create(mock)
       .catch(err => {
@@ -63,8 +60,6 @@ describe('measurement database model', ()=> {
       timestamp: new Date(),
       mac_address: "some random shit",
     });
-    if(mock.mac_address)
-      mock.mac_address = mock.mac_address.toUpperCase();
 
     return measurementDB().create(mock)
       .catch(err => {
@@ -78,7 +73,6 @@ describe('measurement database model', ()=> {
 
     // generate a random mock data with invalid measurement
     var mock = fakeMeasurement();
-    mock.mac_address = mock.mac_address.toUpperCase();
 
     return measurementDB().create(mock)
       .catch(err => {
@@ -95,7 +89,6 @@ describe('measurement database model', ()=> {
       timestamp: new Date(),
       lifetime: undefined,
     });
-    mock.mac_address = mock.mac_address.toUpperCase();
 
     return measurementDB().create(mock)
       .catch(err => {
@@ -112,7 +105,6 @@ describe('measurement database model', ()=> {
       timestamp: new Date(),
       measurement: undefined,
     });
-    mock.mac_address = mock.mac_address.toUpperCase();
 
     return measurementDB().create(mock)
       .catch(err => {
@@ -127,7 +119,6 @@ describe('measurement database model', ()=> {
     // generate few random mock data
     const mock = Array.from({length:3}).map(() => {
       var f = fakeMeasurement({timestamp: new Date()});
-      f.mac_address = f.mac_address.toUpperCase();
       return f;
     })
 
@@ -143,7 +134,6 @@ describe('measurement database model', ()=> {
     // generate few random mock data
     const mock = Array.from({length:3}).map(() => {
       var f = fakeMeasurement({timestamp: new Date()});
-      f.mac_address = f.mac_address.toUpperCase();
       return f;
     })
 
@@ -163,7 +153,6 @@ describe('measurement database model', ()=> {
     // generate few random mock data
     var mock = Array.from({length:5}).map(() => {
       var f = fakeMeasurement({timestamp: new Date()});
-      f.mac_address = f.mac_address.toUpperCase();
       return f;
     })
     
@@ -190,7 +179,6 @@ describe('measurement database model', ()=> {
     // generate few random mock data
     var mock = Array.from({length:5}).map(() => {
       var f = fakeMeasurement({timestamp: new Date()});
-      f.mac_address = f.mac_address.toUpperCase();
       return f;
     })
     
@@ -218,7 +206,6 @@ describe('measurement database model', ()=> {
     // generate few random mock data
     const mock = Array.from({length:20}).map(() => {
       var f = fakeMeasurement({timestamp: new Date()});
-      f.mac_address = f.mac_address.toUpperCase();
       return f;
     })
 
@@ -242,7 +229,6 @@ describe('measurement database model', ()=> {
       var f = fakeMeasurement({
         timestamp: new Date(parseInt(Math.random() * Date.now()))
       });
-      f.mac_address = f.mac_address.toUpperCase();
       return f;
     })
 
@@ -266,7 +252,6 @@ describe('measurement database model', ()=> {
       var f = fakeMeasurement({
         timestamp: new Date(parseInt(Math.random() * Date.now()))
       });
-      f.mac_address = f.mac_address.toUpperCase();
       return f;
     })
 
@@ -290,7 +275,6 @@ describe('measurement database model', ()=> {
       var f = fakeMeasurement({
         timestamp: new Date(parseInt(Math.random() * Date.now()))
       });
-      f.mac_address = f.mac_address.toUpperCase();
       return f;
     })
 
@@ -325,7 +309,6 @@ describe('measurement database model', ()=> {
       var f = fakeMeasurement({
         timestamp: new Date(parseInt(Math.random() * Date.now()))
       });
-      f.mac_address = f.mac_address.toUpperCase();
       return f;
     })
 
