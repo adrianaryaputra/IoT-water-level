@@ -1,5 +1,5 @@
 const supertest = require('supertest');
-const {app, server} = require('..');
+const {app, server} = require('../app');
 const Config = require('../config');
 
 const {
