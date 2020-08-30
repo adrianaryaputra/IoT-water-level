@@ -4,7 +4,7 @@ faker.locale = "en_US";
 module.exports = (override) => {
 
   const measurement = {
-    mac_address: faker.internet.mac().replace(/:/g,'-'),
+    mac_address: faker.internet.mac().replace(/:/g,'-').toUpperCase(),
     lifetime: faker.random.number({min:1, max:100, precision:1}),
     measurement: {
       level: faker.random.number({min:1, max:4, precision:0.01}),
