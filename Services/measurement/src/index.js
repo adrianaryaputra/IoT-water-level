@@ -7,6 +7,7 @@ const httpCallback = require('../../_shared_/httpCallback/express.callback');
 const {
   getMeasurement,
   postMeasurement,
+  deleteMeasurement,
 } = require('./controller')
 
 
@@ -15,6 +16,7 @@ app.use(bodyParser.json());
 
 app.get(Config.HTTP_ADDRESS, httpCallback(getMeasurement));
 app.post(Config.HTTP_ADDRESS, httpCallback(postMeasurement));
+app.delete(Config.HTTP_ADDRESS, httpCallback(deleteMeasurement));
 
 server = app.listen(process.env.API_PORT);
 
