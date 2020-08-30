@@ -29,7 +29,6 @@ describe('simulate API GET call', () => {
 
     // generate fake data
     var mock = fakeMeasurement({timestamp: new Date()});
-    mock.mac_address = mock.mac_address.toUpperCase();
     await measurementDB().create(mock);
     mock.timestamp = mock.timestamp.toISOString();
 
@@ -52,7 +51,6 @@ describe('simulate API GET call', () => {
       var f = fakeMeasurement({
         timestamp: new Date(parseInt(Math.random() * Date.now()))
       });
-      f.mac_address = f.mac_address.toUpperCase();
       return f;
     })
     
@@ -87,7 +85,6 @@ describe('simulate API GET call', () => {
       var f = fakeMeasurement({
         timestamp: new Date(parseInt(Math.random() * Date.now()))
       });
-      f.mac_address = f.mac_address.toUpperCase();
       return f;
     });
 
@@ -115,7 +112,6 @@ describe('simulate API GET call', () => {
       var f = fakeMeasurement({
         timestamp: new Date(parseInt(Math.random() * Date.now()))
       });
-      f.mac_address = f.mac_address.toUpperCase();
       return f;
     });
 
@@ -145,7 +141,6 @@ describe('simulate API GET call', () => {
       var f = fakeMeasurement({
         timestamp: new Date(parseInt(Math.random() * Date.now()))
       });
-      f.mac_address = f.mac_address.toUpperCase();
       return f;
     });
 
