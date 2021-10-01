@@ -117,7 +117,19 @@ header {
   padding: 1em;
 }
 
-header h1{
+header .titlebox{
+  display: flex;
+  align-items: center;
+  /* justify-content: center; */
+  height: 40px;
+  gap: 1em;
+}
+
+header .titlebox img{
+  height: 100%;
+}
+
+header .titlebox h1{
   padding: 0;
   margin: 0;
   font-size: var(--font-size-title);
